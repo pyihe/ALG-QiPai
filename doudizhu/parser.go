@@ -1,6 +1,8 @@
 package doudizhu
 
-import "sort"
+import (
+	"sort"
+)
 
 /*
     @Create by GoLand
@@ -292,4 +294,205 @@ func isSuperBoom(pais []*Poker) (bool) {
 }
 
 /*从一组牌中找出是否包含指定的牌型*/
-//todo
+//比指定key大的单牌
+func largerDanPai(pais []*Poker, key int32) bool {
+	var danPaiValue []int32
+	values := getPaiValueList(pais)
+
+	for _, v := range values {
+		if v > key {
+			danPaiValue = append(danPaiValue, v)
+		}
+	}
+
+	return len(danPaiValue) > 0
+}
+
+//比指定key大的对子
+func largerDuiZi(pais []*Poker, key int32) bool {
+	var duiValue []int32
+
+	duizi := getPaiValueByCount(pais, 2)
+	for _, v := range duizi {
+		if v > key {
+			duiValue = append(duiValue, v)
+		}
+	}
+	return len(duiValue) > 0
+}
+
+//比指定key大的三张
+func largerSanZhang(pais []*Poker, key int32) bool {
+	var sanValue []int32
+
+	sanzhang := getPaiValueByCount(pais, 3)
+	for _, v := range sanzhang {
+		if v > key {
+			sanValue = append(sanValue, v)
+		}
+	}
+	return len(sanValue) > 0
+}
+
+//比指定key大的三带一
+func largerSanDaiDan(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 4 {
+		return false
+	}
+
+	return largerSanZhang(pais, key)
+}
+
+//比指定key大的三带对子
+func largerSanDaiDui(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 5 {
+		return false
+	}
+
+	duizi := getPaiValueByCount(pais, 2)
+	sanzhang := getPaiValueByCount(pais, 3)
+	if largerSanZhang(pais, key) && (len(duizi) > 0 || len(sanzhang) > 1) {
+		return true
+	}
+	return false
+}
+
+//比指定key大的顺子
+func largerShunZi(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length {
+		return false
+	}
+
+	valueList := getPaiValueList(pais)
+	if len(valueList) < length {
+		return false
+	}
+	sort.Sort(PaiValueList(valueList))
+	if len(valueList) == length {
+		if valueList[len(valueList)-1]-valueList[0]+1 != int32(length) {
+			return false
+		}
+		if valueList[len(valueList)-1] > 14 {
+			return false
+		}
+		return true
+	}
+	for i := 0; i < len(valueList)-length+1; i++ {
+		if valueList[i+length-1]-valueList[i]+1 != int32(length) {
+			continue
+		}
+		if valueList[i] > 14 || valueList[i+length-1] > 14 {
+			continue
+		}
+		if valueList[i] <= key {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+//比指定key大的连对
+func largerLianDui(pais []*Poker, key int32, length int) bool {
+	values := getPaiValueByCount(pais, 2)
+	if len(values) < length {
+		return false
+	}
+
+	sort.Sort(PaiValueList(values))
+	if len(values) == length {
+		if values[len(values)-1]-values[0] != int32(length) {
+			return false
+		}
+		if values[len(values)-1] > 14 {
+			return false
+		}
+		return true
+	}
+	for i := 0; i < len(values)-length+1; i++ {
+		if values[i+length-1]-values[i]+1 != int32(length) {
+			continue
+		}
+		if values[i] > 14 || values[i+length-1] > 14 {
+			continue
+		}
+		if values[i] <= key {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+//比指定key大的飞机不带牌
+func largerAirBuDai(pais []*Poker, key int32, length int) bool {
+	values := getPaiValueByCount(pais, 3)
+	if len(values) < length {
+		return false
+	}
+
+	sort.Sort(PaiValueList(values))
+	if len(values) == length {
+		if values[len(values)-1]-values[0] != int32(length) {
+			return false
+		}
+		if values[len(values)-1] > 14 {
+			return false
+		}
+		return true
+	}
+	for i := 0; i < len(values)-length+1; i++ {
+		if values[i+length-1]-values[i]+1 != int32(length) {
+			continue
+		}
+		if values[i] > 14 || values[i+length-1] > 14 {
+			continue
+		}
+		if values[i] <= key {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+//比指定key大的飞机带单牌
+func largerAirDaiDan(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length*4 {
+		return false
+	}
+
+	return largerAirBuDai(pais, key, length)
+}
+
+//比指定key大的飞机带对子
+func largerAireDaiDui(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length*5 {
+		return false
+	}
+
+	if largerAirBuDai(pais, key, length) {
+		sanzhang := getPaiValueByCount(pais, 3)
+		duizi := getPaiValueByCount(pais, 2)
+		if len(sanzhang) > length+1 || len(duizi) >= length {
+			return true
+		}
+	}
+	return false
+}
+
+//比指定key大的炸弹
+func largerBoom(pais []*Poker, key int32) bool {
+	sizhang := getPaiValueByCount(pais, 4)
+	for _, v := range sizhang {
+		if v > key {
+			return true
+		}
+	}
+	return false
+}
