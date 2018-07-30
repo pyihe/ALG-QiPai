@@ -107,7 +107,7 @@ type Poker struct {
 	Value  int32  //牌值：牌面的值
 	Flower int32  //花色
 	Name   string //牌面描述
-	IsLai  bool   //是否是赖子牌
+	Lai    bool   //是否是赖子牌
 }
 
 func (p *Poker) GetId() int32 {
@@ -127,7 +127,7 @@ func (p *Poker) GetName() string {
 }
 
 func (p *Poker) IsLaiZi() bool {
-	return p.IsLai
+	return p.Lai
 }
 
 //根据map index解析一张牌
