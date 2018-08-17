@@ -1,7 +1,6 @@
 package doudizhu
 
 import (
-	"fmt"
 	"github.com/name5566/leaf/util"
 	"sort"
 )
@@ -606,7 +605,6 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 	laiZi, notLaiZi := getLaiZiFromPais(newPais)
 	laiZiCount := len(laiZi)
-
 	danzhang := getPaiValueByCount(notLaiZi, 1)
 	liangzhang := getPaiValueByCount(notLaiZi, 2)
 	//sanzhang := getPaiValueByCount(notLaiZi, 3)
@@ -618,7 +616,6 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 	//规则：从牌堆中剔除单牌，然后判断剩余的牌是否是飞机不带牌
 	//两连的飞机
 	if paiCount == 8 {
-		fmt.Println("step 0")
 		//刚好带了两张2或者大小王，只需要判断剩下的牌是否是飞机不带牌
 		if len(daiPai) == 2 {
 			if isOk, key := isAirBuDai_lai(newPais); isOk {
@@ -645,9 +642,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 		}
 		if len(daiPai) == 0 {
-			fmt.Println("step 1")
 			if len(danzhang) >= 2 {
-				fmt.Println("step 2")
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
 						tempPais := util.DeepClone(newPais).([]*Poker)
@@ -660,7 +655,6 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			if len(danzhang) == 1 && laiZiCount > 0 {
-				fmt.Println("step 3")
 				tempPais := util.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisByValue(danzhang[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -669,7 +663,6 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			if laiZiCount > 1 {
-				fmt.Println("step 4")
 				tempPais := util.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -678,7 +671,6 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			if len(danzhang) == 0 && len(liangzhang) > 0 {
-				fmt.Println("step 5")
 				for _, v := range liangzhang {
 					tempPais := util.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
@@ -801,7 +793,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 			//单张和赖子的混合
 			//两张单牌，一张赖子
-			if len(danzhang) >= 2 && laiZiCount == 1 {
+			if len(danzhang) >= 2 && laiZiCount >= 1 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
 						tempPais := util.DeepClone(newPais).([]*Poker)
@@ -815,7 +807,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			//两张赖子，一张单牌
-			if len(danzhang) >= 1 && laiZiCount == 2 {
+			if len(danzhang) >= 1 && laiZiCount >= 2 {
 				for _, v := range danzhang {
 					tempPais := util.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
@@ -840,7 +832,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 					}
 				}
 			}
-			//找一个亮张，一个赖子
+			//找一个两张，一个赖子
 			if len(liangzhang) > 0 && laiZiCount > 0 {
 				for _, v := range liangzhang {
 					tempPais := util.DeepClone(newPais).([]*Poker)
@@ -963,7 +955,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 			//单张和赖子的混合
 			//两张单牌，一张赖子
-			if len(danzhang) >= 2 && laiZiCount == 1 {
+			if len(danzhang) >= 2 && laiZiCount >= 1 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
 						tempPais := util.DeepClone(newPais).([]*Poker)
@@ -977,7 +969,7 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			//两张赖子，一张单牌
-			if len(danzhang) >= 1 && laiZiCount == 2 {
+			if len(danzhang) >= 1 && laiZiCount >= 2 {
 				for _, v := range danzhang {
 					tempPais := util.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
