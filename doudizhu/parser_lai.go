@@ -579,7 +579,7 @@ func isAirBuDai_lai(pais []*Poker) (bool, int32) {
 }
 
 //是否是飞机带单牌
-func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
+func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 	paiCount := len(pais)
 	if paiCount < 8 || paiCount > 16 || paiCount%4 != 0 {
 		return false, -1
@@ -1137,7 +1137,613 @@ func IsAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 //是否是飞机带对子
 func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
-	//TODO
+	paiCount := len(pais)
+	if paiCount < 10 || paiCount > 15 || paiCount%5 != 0 {
+		return false, -1
+	}
+
+	var daiPai []*Poker                 //如果pais中有2、大小王，则一定是被带的牌
+	newPais := make([]*Poker, paiCount) //可以组成三张的牌
+	copy(newPais, pais)
+
+	for _, p := range pais {
+		if p == nil {
+			continue
+		}
+		if p.GetValue() == 16 || p.GetValue() == 17 {
+			return false, -1
+		}
+		if p.GetValue() == 15 && !p.IsLaiZi() {
+			daiPai = append(daiPai, p)
+			newPais = delPokerFromPaisById(p, newPais)
+		}
+	}
+
+	laiZi, notLaiZi := getLaiZiFromPais(newPais)
+	laiZiCount := len(laiZi)
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+
+	if laiZiCount == 0 {
+		return isAirDaiDui(pais)
+	}
+
+	//两连的飞机
+	if paiCount == 10 {
+		//不能带双王，
+		if len(daiPai) == 4 {
+			if isOk, key := isAirBuDai_lai(newPais); isOk {
+				return isOk, key
+			}
+		}
+
+		//三个2
+		if len(daiPai) == 3 {
+			tempPais := util.DeepClone(newPais).([]*Poker)
+			tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+			if isOk, key := isAirBuDai_lai(tempPais); isOk {
+				return isOk, key
+			}
+		}
+		//一对2, 再找一对作为带牌
+		if len(daiPai) == 2 {
+			//两个赖子
+			if laiZiCount > 1 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+			//一个单张，一个赖子
+			if len(danzhang) > 0 && laiZiCount > 0 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个两张
+			if len(liangzhang) > 0 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+		}
+
+		//带了一个2, 肯定需要一个赖子
+		if len(daiPai) == 1 {
+			if laiZiCount < 1 {
+				return false, -1
+			}
+			//一个赖子，一个两张
+			if len(liangzhang) > 0 && laiZiCount >= 1 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//两个赖子，一个单张
+			if len(danzhang) > 0 && laiZiCount >= 2 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//三个赖子
+			if laiZiCount >= 3 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+		}
+
+		//没有带牌，需要找两对
+		if len(daiPai) == 0 {
+			//找两个两张
+			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 {
+				for i := 0; i < liangzhangLen-1; i++ {
+					for j := i + 1; j < liangzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+
+			//找四个赖子
+			if laiZiCount == 4 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[3], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+
+			//找一个两张，两个赖子
+			if len(liangzhang) >= 1 && laiZiCount >= 2 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+
+			//找一个两张，一个赖子， 一个单张
+			if len(liangzhang) > 0 && laiZiCount >= 1 && len(danzhang) > 0 {
+				for _, lv := range liangzhang {
+					for _, dv := range danzhang {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(dv, tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+
+			//找两个单张，两个赖子
+			if danzhangLen := len(danzhang); danzhangLen >= 1 && laiZiCount >= 1 {
+				for i := 0; i < danzhangLen-1; i++ {
+					for j := i + 1; j < danzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//三连的飞机
+	if paiCount == 15 {
+		//带了4个2， 还需要一对
+		if len(daiPai) == 4 {
+			//一个两张
+			if liangzhangLen := len(liangzhang); liangzhangLen > 0 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//两个赖子
+			if laiZiCount > 1 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+			//一个赖子，一个单张
+			if len(danzhang) > 0 && laiZiCount > 0 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+		}
+
+		//带三个2，至少需要一个2
+		if len(daiPai) == 3 {
+			//一个两张，一个赖子
+			if len(liangzhang) > 0 && laiZiCount > 0 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个赖子， 两个赖子
+			if laiZiCount >= 3 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+			//一个赖子， 一个赖子，一个单张
+			if len(danzhang) > 0 && laiZiCount >= 2 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+		}
+
+		//带了两个2， 还需要2对
+		if len(daiPai) == 2 {
+			//两个两张
+			if liangzhangLen := len(liangzhang); liangzhangLen > 1 {
+				for i := 0; i < liangzhangLen-1; i++ {
+					for j := i + 1; j < liangzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//一个两张，两个赖子
+			if len(liangzhang) > 0 && laiZiCount > 1 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个两张， 一个单张， 一个赖子
+			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount > 0 {
+				for _, lv := range liangzhang {
+					for _, dv := range danzhang {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(dv, tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//四个赖子
+			if laiZiCount == 4 {
+				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+				tempPais = delPokerFromPaisById(laiZi[3], tempPais)
+				if isOk, key := isAirBuDai_lai(tempPais); isOk {
+					return isOk, key
+				}
+			}
+
+			//一个单张， 三个赖子
+			if len(danzhang) > 0 && laiZiCount >= 3 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//两个单张， 两个赖子
+			if danzhangLen := len(danzhang); danzhangLen > 1 && laiZiCount > 1 {
+				for i := 0; i < danzhangLen-1; i++ {
+					for j := i + 1; j < danzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+		}
+
+		//带了一个2
+		if len(daiPai) == 1 {
+			//一个三张，三个赖子
+			if len(sanzhang) > 0 && laiZiCount >= 3 {
+				for _, v := range sanzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+
+			//两个两张，一个赖子
+			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 {
+				for i := 0; i < liangzhangLen-1; i++ {
+					for j := i + 1; j < liangzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//一个两张，一个赖子， 两个赖子
+			if len(liangzhang) > 0 && laiZiCount >= 3 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个两张， 一个赖子，一个单张， 一个赖子
+			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount >= 2 {
+				for _, lv := range liangzhang {
+					for _, dv := range danzhang {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(dv, tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//一个赖子， 一个单张，三个赖子
+			if len(danzhang) > 0 && laiZiCount == 4 {
+				for _, v := range danzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[3], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个赖子， 两个单张， 两个赖子
+			if danzhangLen := len(danzhang); danzhangLen >= 2 && laiZiCount >= 3 {
+				for i := 0; i < danzhangLen-1; i++ {
+					for j := i + 1; j < danzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+		}
+
+		//不带2，需要找三对
+		if len(daiPai) == 0 {
+			//三个两张
+			if liangzhangLen := len(liangzhang); liangzhangLen >= 3 {
+				for i := 0; i < liangzhangLen-2; i++ {
+					for j := i + 1; j < liangzhangLen-1; j++ {
+						for k := j + 1; k < liangzhangLen; k++ {
+							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[k], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[k], tempPais)
+							if isOk, key := isAirBuDai_lai(tempPais); isOk {
+								return isOk, key
+							}
+						}
+					}
+				}
+			}
+			//两个两张，两个赖子
+			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 && laiZiCount >= 2 {
+				for i := 0; i < liangzhangLen-1; i++ {
+					for j := i + 1; j < liangzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//两个两张， 一个单张，一个赖子
+			if len(liangzhang) >= 2 && len(danzhang) > 0 && laiZiCount >= 1 {
+				for i := 0; i < len(liangzhang)-1; i++ {
+					for j := i + 1; j < len(liangzhang); j++ {
+						for _, v := range danzhang {
+							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
+							tempPais = delPokerFromPaisByValue(v, tempPais)
+							tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+							if isOk, key := isAirBuDai_lai(tempPais); isOk {
+								return isOk, key
+							}
+						}
+					}
+				}
+			}
+			//一个两张，四个赖子
+			if len(liangzhang) > 0 && laiZiCount == 4 {
+				for _, v := range liangzhang {
+					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisByValue(v, tempPais)
+					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+					tempPais = delPokerFromPaisById(laiZi[3], tempPais)
+					if isOk, key := isAirBuDai_lai(tempPais); isOk {
+						return isOk, key
+					}
+				}
+			}
+			//一个两张， 一个单张，三个赖子
+			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount >= 3 {
+				for _, lv := range liangzhang {
+					for _, dv := range danzhang {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(lv, tempPais)
+						tempPais = delPokerFromPaisByValue(dv, tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//一个两张， 两个单张，两个赖子
+			if danzhangLen := len(danzhang); len(liangzhang) > 0 && danzhangLen >= 2 && laiZiCount >= 2 {
+				for _, v := range liangzhang {
+					for i := 0; i < danzhangLen-1; i++ {
+						for j := i + 1; j < danzhangLen; j++ {
+							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais = delPokerFromPaisByValue(v, tempPais)
+							tempPais = delPokerFromPaisByValue(v, tempPais)
+							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+							tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+							tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+							if isOk, key := isAirBuDai_lai(tempPais); isOk {
+								return isOk, key
+							}
+						}
+					}
+				}
+			}
+			//两个单张，四个赖子
+			if danzhangLen := len(danzhang); danzhangLen >= 2 && laiZiCount == 4 {
+				for i := 0; i < danzhangLen-1; i++ {
+					for j := i + 1; j < danzhangLen; j++ {
+						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+						tempPais = delPokerFromPaisById(laiZi[3], tempPais)
+						if isOk, key := isAirBuDai_lai(tempPais); isOk {
+							return isOk, key
+						}
+					}
+				}
+			}
+			//三个单张，三个赖子
+			if danzhangLen := len(danzhang); danzhangLen >= 3 && laiZiCount >= 3 {
+				for i := 0; i < danzhangLen-2; i++ {
+					for j := i + 1; j < danzhangLen-1; j++ {
+						for k := j + 1; k < danzhangLen; k++ {
+							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
+							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
+							tempPais = delPokerFromPaisByValue(danzhang[k], tempPais)
+							tempPais = delPokerFromPaisById(laiZi[0], tempPais)
+							tempPais = delPokerFromPaisById(laiZi[1], tempPais)
+							tempPais = delPokerFromPaisById(laiZi[2], tempPais)
+							if isOk, key := isAirBuDai_lai(tempPais); isOk {
+								return isOk, key
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return false, -1
 }
 
