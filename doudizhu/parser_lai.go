@@ -1870,6 +1870,47 @@ func isSiDaiDui_lai(pais []*Poker) (bool, int32) {
 	return false, -1
 }
 
+//是否是普通炸弹
+func isNormalBoom(pais []*Poker) (bool, int32) {
+	paiCount := len(pais)
+	if paiCount != 4 {
+		return false, -1
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+	sizhang := getPaiValueByCount(notLaiZi, 4)
+
+	if laiZiCount == 0 {
+		if len(sizhang) == 1 {
+			return true, sizhang[0]
+		}
+	}
+	if laiZiCount == 1 {
+		if len(sanzhang) == 1 && len(sanzhang)*3+laiZiCount == paiCount {
+			return true, sanzhang[0]
+		}
+	}
+	if laiZiCount == 2 {
+		if len(liangzhang) == 2 && len(liangzhang)*2+laiZiCount == paiCount {
+			return true, liangzhang[0]
+		}
+	}
+	if laiZiCount == 3 {
+		if len(danzhang) == 1 && len(danzhang)+laiZiCount == paiCount {
+			return true, danzhang[0]
+		}
+	}
+	//全赖子的炸弹比普通炸弹大
+	if laiZiCount == 4 {
+		return true, 16
+	}
+	return false, -1
+}
+
 //获取一组牌中的赖子牌
 func getLaiZiFromPais(pais []*Poker) (laizi []*Poker, notLaiZi []*Poker) {
 	for _, p := range pais {
