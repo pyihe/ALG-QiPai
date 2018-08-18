@@ -13,8 +13,8 @@ import (
 */
 
 var (
-	pokersIndex   = []int32{12, 25, 	11, 24, 	10, 23,}
-	laiZiIndex    = []int32{1, 14, 27, 40}
+	pokersIndex   = []int32{12, 25, 38, 	11, 24, 37, 	10, 23, 36, 	2,15, 3, 16, 13,26}
+	laiZiIndex    = []int32{1}
 	pokers, laiZi []*Poker
 )
 
@@ -31,6 +31,6 @@ func init() {
 func TestIsAirDaiDan_lai(t *testing.T) {
 	pais := append(pokers, laiZi...)
 	//fmt.Printf("pais.len = [%v]\n", len(pais))
-	result, key := isLianDui_lai(pais)
+	result, key := isAirDaiDui_lai(pais)
 	fmt.Printf("result = [%v]	key = [%v]\n", result, key)
 }
