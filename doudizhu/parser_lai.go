@@ -1911,6 +1911,249 @@ func isNormalBoom(pais []*Poker) (bool, int32) {
 	return false, -1
 }
 
+/*
+	判断一组牌中是否有比指定key大的牌型，带赖子
+*/
+
+//比指定key大的对子
+func largerDuiZi_lai(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 2 {
+		return false
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	if laiZiCount == 0 {
+		return largerDuiZi(pais, key)
+	} else {
+		var largerValues []int32
+		for _, v := range notLaiZi {
+			if v.GetValue() > key {
+				largerValues = append(largerValues, v.GetValue())
+			}
+		}
+		return len(largerValues) > 0
+	}
+}
+
+//是否有比指定key大的三不带
+func largerSanBuDai_lai(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 3 {
+		return false
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	//sanzhang := getPaiValueByCount(notLaiZi, 3)
+
+	if laiZiCount == 0 {
+		return largerSanBuDai(pais, key)
+	}
+
+	if laiZiCount >= 1 {
+		if len(liangzhang) > 0 {
+			for _, v := range liangzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+	}
+
+	if laiZiCount >= 2 {
+		if len(danzhang) > 0 {
+			for _, v := range danzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+	}
+	if laiZiCount >= 3 {
+		if laiZi[0].GetValue() > key {
+			return true
+		}
+	}
+	return false
+}
+
+//是否有比指定key大的三带一
+func largerSanDaiDan_lai(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 4 {
+		return false
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+
+	if laiZiCount == 0 {
+		return largerSanDaiDan(pais, key)
+	}
+
+	if laiZiCount >= 1 {
+		if len(liangzhang) > 0 {
+			for _, v := range liangzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+	}
+
+	if laiZiCount >= 2 {
+		if len(danzhang) > 0 {
+			for _, v := range danzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+	}
+
+	if laiZiCount == 3 {
+		if laiZi[0].GetValue() > key {
+			return true
+		}
+	}
+	return false
+}
+
+//比指定key大的三带对子
+func largerSanDaiDui_lai(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 5 {
+		return false
+	}
+
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+
+	if laiZiCount == 0 {
+		return largerSanDaiDui(pais, key)
+	}
+	//补一张赖子
+	if laiZiCount >= 1 {
+		//补成对子
+		if len(sanzhang) > 0 {
+			for _, v := range sanzhang {
+				if v > key {
+					if len(sanzhang) > 1 {
+						return true
+					}
+					//找对子
+					if len(liangzhang) > 0 {
+						return true
+					}
+					if len(danzhang) > 0 {
+						for _, dv := range danzhang {
+							if dv != 16 && dv != 17 {
+								return true
+							}
+						}
+					}
+				}
+			}
+		}
+		//补成三张
+		if liangzhangLen := len(liangzhang); liangzhangLen > 0 {
+			for _, v := range liangzhang {
+				if v > key {
+					if len(sanzhang) > 0 {
+						return true
+					}
+					if liangzhangLen > 1 {
+						return true
+					}
+				}
+			}
+		}
+	}
+	//补两张赖子
+	if laiZiCount >= 2 {
+		//补成三张
+		if len(danzhang) > 0 {
+			for _, v := range danzhang {
+				if v > key && (len(liangzhang) > 0 || len(sanzhang) > 0 ){
+					return true
+				}
+			}
+		}
+
+		//补成对子
+		if len(sanzhang) > 0 {
+			for _, v := range sanzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+
+		//一张赖子补成三张，一张赖子补成对子
+		if len(liangzhang) > 0 {
+			for _, v := range liangzhang {
+				if v > key {
+					if len(sanzhang) > 0 {
+						return true
+					}
+					if len(liangzhang) > 1 {
+						return true
+					}
+					if len(danzhang) > 0 {
+						for _, dv := range danzhang {
+							if dv != 16 && dv != 17 {
+								return true
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	//补三张赖子
+	if laiZiCount >= 3 {
+		if laiZi[0].GetValue() > key {
+			if len(liangzhang) > 0 || len(sanzhang) > 0 {
+				return true
+			}
+		}
+		if len(liangzhang) > 0 {
+			//只要有一个两张满足大于key就return
+			for _, v :=range liangzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+		if len(danzhang) > 0 {
+			for _, v := range danzhang {
+				if v > key {
+					if len(danzhang) > 1 {
+						return true
+					}
+					if len(liangzhang) > 0 {
+						return true
+					}
+					if len(sanzhang) > 0 {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
 //获取一组牌中的赖子牌
 func getLaiZiFromPais(pais []*Poker) (laizi []*Poker, notLaiZi []*Poker) {
 	for _, p := range pais {
