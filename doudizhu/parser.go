@@ -322,7 +322,7 @@ func largerDuiZi(pais []*Poker, key int32) bool {
 }
 
 //比指定key大的三张
-func largerSanZhang(pais []*Poker, key int32) bool {
+func largerSanBuDai(pais []*Poker, key int32) bool {
 	var sanValue []int32
 
 	sanzhang := getPaiValueByCount(pais, 3)
@@ -341,7 +341,7 @@ func largerSanDaiDan(pais []*Poker, key int32) bool {
 		return false
 	}
 
-	return largerSanZhang(pais, key)
+	return largerSanBuDai(pais, key)
 }
 
 //比指定key大的三带对子
@@ -353,7 +353,7 @@ func largerSanDaiDui(pais []*Poker, key int32) bool {
 
 	duizi := getPaiValueByCount(pais, 2)
 	sanzhang := getPaiValueByCount(pais, 3)
-	if largerSanZhang(pais, key) && (len(duizi) > 0 || len(sanzhang) > 1) {
+	if largerSanBuDai(pais, key) && (len(duizi) > 0 || len(sanzhang) > 1) {
 		return true
 	}
 	return false
