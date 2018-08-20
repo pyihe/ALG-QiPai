@@ -173,7 +173,7 @@ func isShunZi_lai(pais []*Poker) (bool, int32) {
 		if p == nil {
 			continue
 		}
-		if paiValue := p.GetValue(); paiValue == 15 || paiValue == 16 || paiValue == 17 {
+		if paiValue := p.GetValue(); !p.IsLaiZi() && (paiValue == 15 || paiValue == 16 || paiValue == 17) {
 			return false, -1
 		}
 	}
@@ -328,7 +328,7 @@ func isLianDui_lai(pais []*Poker) (bool, int32) {
 		if p == nil {
 			continue
 		}
-		if paiValue := p.GetValue(); paiValue == 15 || paiValue == 16 || paiValue == 17 {
+		if paiValue := p.GetValue();  !p.IsLaiZi() && (paiValue == 15 || paiValue == 16 || paiValue == 17){
 			return false, -1
 		}
 	}
@@ -581,6 +581,7 @@ func isAirBuDai_lai(pais []*Poker) (bool, int32) {
 //是否是飞机带单牌
 func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 	paiCount := len(pais)
+	//TODO 地主出五连的情况为20张牌
 	if paiCount < 8 || paiCount > 16 || paiCount%4 != 0 {
 		return false, -1
 	}
@@ -1138,6 +1139,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 //是否是飞机带对子
 func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 	paiCount := len(pais)
+	//TODO 地主出四连的情况为20张牌
 	if paiCount < 10 || paiCount > 15 || paiCount%5 != 0 {
 		return false, -1
 	}
@@ -2084,7 +2086,7 @@ func largerSanDaiDui_lai(pais []*Poker, key int32) bool {
 		//补成三张
 		if len(danzhang) > 0 {
 			for _, v := range danzhang {
-				if v > key && (len(liangzhang) > 0 || len(sanzhang) > 0 ){
+				if v > key && (len(liangzhang) > 0 || len(sanzhang) > 0 ) {
 					return true
 				}
 			}
@@ -2129,7 +2131,7 @@ func largerSanDaiDui_lai(pais []*Poker, key int32) bool {
 		}
 		if len(liangzhang) > 0 {
 			//只要有一个两张满足大于key就return
-			for _, v :=range liangzhang {
+			for _, v := range liangzhang {
 				if v > key {
 					return true
 				}
@@ -2150,6 +2152,508 @@ func largerSanDaiDui_lai(pais []*Poker, key int32) bool {
 				}
 			}
 		}
+	}
+	return false
+}
+
+//比指定key大的单顺
+func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length {
+		return false
+	}
+
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	values := getPaiValueList(notLaiZi)
+	valueLen := len(values)
+	if valueLen+laiZiCount < length {
+		return false
+	}
+
+	sort.Sort(PaiValueList(values))
+
+	if laiZiCount == 0 {
+		return largerShunZi(pais, key, length)
+	}
+
+	//只取一个赖子
+	if laiZiCount >= 1 {
+		//找length长度的list， 不需要赖子的情况
+		for i := 0; i < valueLen-length; i++ {
+			//刚好够，不需要赖子
+			if values[i+length]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length] < 15 {
+					return true
+				}
+			}
+		}
+		//找length-1长度的list，需要一个赖子
+		for i := 0; i < valueLen-length+1; i++ {
+			//长度连续，赖子补在两边
+			if values[i+length-1]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-1]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+			//长度不连续，赖子补在中间
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+	}
+
+	//取两个赖子,找length-2长度的list,
+	if laiZiCount >= 2 {
+		// 需要两个赖子
+		for i := 0; i < valueLen-length+2; i++ {
+			//两个赖子都放在两边
+			if values[i+length-2]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-2]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-2]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+			//一个赖子在两边，一个在中间
+			if values[i+length-2]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-2]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+			//两个赖子都在中间
+			if values[i+length-2]-values[i]+1 == int32(length)-2 {
+				if values[i] > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+	}
+
+	//取三个赖子,找length-3长度的list
+	if laiZiCount >= 3 {
+		for i := 0; i < valueLen-length+3; i++ {
+			//三个赖子在两边
+			if values[i+length-3]-values[i]+1 == int32(length)-3 {
+				if values[i] > key && values[i+length-3]+3 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-3]+2 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-3]+1 < 15 {
+					return true
+				}
+				if values[i]-3 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+			//两个赖子在两边， 一个赖子在中间
+			if values[i+length-3]-values[i]+1 == int32(length)-2 {
+				if values[i] > key && values[i+length-3]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-3]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+			//一个赖子在两边，两个赖子在中间
+			if values[i+length-3]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-3]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+			//三个赖子都在中间
+			if values[i+length-3]-values[i]+1 == int32(length) {
+				return true
+			}
+		}
+
+	}
+
+	//取四个赖子
+	if laiZiCount >= 4 {
+		for i := 0; i < valueLen-length+4; i++ {
+			//四个赖子都在两边
+			if values[i+length-4]-values[i]+1 == int32(length)-4 {
+				if values[i] > key && values[i+length-4]+4 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-4]+3 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-4]+2 < 15 {
+					return true
+				}
+				if values[i]-3 > key && values[i+length-4]+1 < 15 {
+					return true
+				}
+				if values[i]-4 > key && values[i+length-4] < 15 {
+					return true
+				}
+			}
+			//一个赖子在中间，其余在两边
+			if values[i+length-4]-values[i]+1 == int32(length)-3 {
+				if values[i] > key && values[i+length-4]+3 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-4]+2 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-4]+1 < 15 {
+					return true
+				}
+				if values[i]-3 > key && values[i+length-4] < 15 {
+					return true
+				}
+			}
+			//两个赖子在中间，其余在两边
+			if values[i+length-4]-values[i]+1 == int32(length)-2 {
+				if values[i] > key && values[i+length-4]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-4]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-4] < 15 {
+					return true
+				}
+			}
+			//三个赖子在中间，其余在两边
+			if values[i+length-4]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-4]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-4] < 15 {
+					return true
+				}
+			}
+			//四个赖子在中间
+			if values[i+length-4]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-4] < 15 {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+//比指定key大的连对
+func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < 6 {
+		return false
+	}
+
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	values := getPaiValueList(notLaiZi)
+	valueLen := len(values)
+
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+	sizhang := getPaiValueByCount(notLaiZi, 4)
+
+	if laiZiCount == 0 {
+		return largerLianDui(pais, key, length)
+	}
+
+	//只取一个赖子
+	if laiZiCount >= 1 {
+		//不找赖子
+		var duiZi []int32
+		duiZi = append(duiZi, liangzhang...)
+		duiZi = append(duiZi, sanzhang...)
+		duiZi = append(duiZi, sizhang...)
+		if len(duiZi) > length {
+			for i := 0; i < len(duiZi)-length; i++ {
+				if duiZi[i+length]-duiZi[i]+1 == int32(length) {
+					if duiZi[i] > key && duiZi[i+length] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+		//找一个赖子
+		for i := 0; i < valueLen-length; i++ {
+			if values[i+length]-values[i]+1 == int32(length) {
+				var danCount int32 //单张的数量,一张赖子只允许连队中有一个单牌
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 1 {
+					continue
+				}
+				if values[i] > key && values[i+length] < 15 {
+					return true
+				}
+			}
+		}
+	}
+	//取两个赖子
+	if laiZiCount >= 2 {
+		//两个赖子分别补两个单张
+		for i := 0; i < valueLen-length; i++ {
+			if values[i+length]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i] > key && values[i+length] < 15 {
+					return true
+				}
+			}
+		}
+		//两个赖子补成一个对子
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在两边
+			if values[i+length-1]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-1]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+		//两个赖子补成一个对子
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在中间
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+	}
+	//取三个赖子
+	if laiZiCount >= 3 {
+		//三个赖子分别补三个单张，形成对子
+		for i := 0; i < valueLen-length; i++ {
+			if values[i+length]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 3 {
+					continue
+				}
+				if values[i] > key && values[i+length] < 15 {
+					return true
+				}
+			}
+		}
+		//三个赖子补一个对子和一个单张
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在两边
+			if values[i+length-1]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 1 {
+					continue
+				}
+				if values[i] > key && values[i+length-1]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+		//三个赖子补一个对子和一个单张
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在中间
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 1 {
+					continue
+				}
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+	}
+	//取四个赖子
+	if laiZiCount >= 4 {
+		//补四个单张
+		for i := 0; i < valueLen-length; i++ {
+			if values[i+length]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 4 {
+					continue
+				}
+				if values[i] > key && values[i+length] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个单张，剩下一个对子
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在两边
+			if values[i+length-1]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i] > key && values[i+length-1]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个单张，剩下一个对子
+		for i := 0; i < valueLen-length+1; i++ {
+			//补的对子在中间
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i < valueLen-length+2; i++ {
+			//补的对子在两边
+			if values[i+length-2]-values[i]+1 == int32(length)-2 {
+				var danCount int32
+				for j := 0; j < length-2; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-2]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-2]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i < valueLen-length+2; i++ {
+			//补的对子一个在中间一个在两边
+			if values[i+length-2]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-2; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-2]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i < valueLen-length+2; i++ {
+			//补的对子都在中间
+			if values[i+length-2]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-2; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+
 	}
 	return false
 }
