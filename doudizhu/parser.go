@@ -49,6 +49,16 @@ func getPaiValueByCount(pais []*Poker, cnt int) (danZhangValue []int32) {
 	return
 }
 
+//从一组牌中获取指定牌值的牌的数量
+func getPaiCountByValue(pais []*Poker, v int32) (cnt int32) {
+	for _, p := range pais {
+		if p != nil && p.GetValue() == v {
+			cnt++
+		}
+	}
+	return
+}
+
 //获取一组牌去重后的牌值列表
 func getPaiValueList(pais []*Poker) (values []int32) {
 	if len(pais) <= 0 || pais == nil {
@@ -143,7 +153,7 @@ func isShunZi(pais []*Poker) (bool, int32) {
 	sort.Sort(PaiValueList(paiValues))
 
 	valueLen := len(paiValues)
-	if paiValues[valueLen-1]-paiValues[0]+1 == int32(valueLen) {
+	if paiValues[valueLen-1]-paiValues[0]+1 == int32(valueLen) && paiValues[valueLen-1] < 15 {
 		return true, paiValues[0]
 	}
 	return false, -1
@@ -164,7 +174,7 @@ func isLianDui(pais []*Poker) (bool, int32) {
 
 	//对子的牌值排序
 	sort.Sort(PaiValueList(duizi))
-	if duizi[duiZiLen-1]-duizi[0]+1 == int32(duiZiLen) {
+	if duizi[duiZiLen-1]-duizi[0]+1 == int32(duiZiLen) && duizi[duiZiLen-1] < 15 {
 		return true, duizi[0]
 	}
 	return false, -1
@@ -380,11 +390,11 @@ func largerShunZi(pais []*Poker, key int32, length int) bool {
 		}
 		return true
 	}
-	for i := 0; i < len(valueList)-length+1; i++ {
-		if valueList[i+length-1]-valueList[i]+1 != int32(length) {
+	for i := 0; i < len(valueList)-length; i++ {
+		if valueList[i+length]-valueList[i]+1 != int32(length) {
 			continue
 		}
-		if valueList[i] > 14 || valueList[i+length-1] > 14 {
+		if valueList[i] > 14 || valueList[i+length] > 14 {
 			continue
 		}
 		if valueList[i] <= key {
@@ -397,7 +407,14 @@ func largerShunZi(pais []*Poker, key int32, length int) bool {
 
 //比指定key大的连对
 func largerLianDui(pais []*Poker, key int32, length int) bool {
-	values := getPaiValueByCount(pais, 2)
+	liangzhang := getPaiValueByCount(pais, 2)
+	sanzhang := getPaiValueByCount(pais, 3)
+	sizhang := getPaiValueByCount(pais, 4)
+
+	var values []int32
+	values = append(values, liangzhang...)
+	values = append(values, sanzhang...)
+	values = append(values, sizhang...)
 	if len(values) < length {
 		return false
 	}
@@ -412,11 +429,11 @@ func largerLianDui(pais []*Poker, key int32, length int) bool {
 		}
 		return true
 	}
-	for i := 0; i < len(values)-length+1; i++ {
-		if values[i+length-1]-values[i]+1 != int32(length) {
+	for i := 0; i < len(values)-length; i++ {
+		if values[i+length]-values[i]+1 != int32(length) {
 			continue
 		}
-		if values[i] > 14 || values[i+length-1] > 14 {
+		if values[i] > 14 || values[i+length] > 14 {
 			continue
 		}
 		if values[i] <= key {
