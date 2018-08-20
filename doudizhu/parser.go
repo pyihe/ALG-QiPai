@@ -382,25 +382,14 @@ func largerShunZi(pais []*Poker, key int32, length int) bool {
 	}
 	sort.Sort(PaiValueList(valueList))
 	if len(valueList) == length {
-		if valueList[len(valueList)-1]-valueList[0]+1 != int32(length) {
-			return false
+		if valueList[len(valueList)-1]-valueList[0]+1 == int32(length) && valueList[len(valueList)-1] < 15 {
+			return true
 		}
-		if valueList[len(valueList)-1] > 14 {
-			return false
-		}
-		return true
 	}
 	for i := 0; i < len(valueList)-length; i++ {
-		if valueList[i+length]-valueList[i]+1 != int32(length) {
-			continue
+		if valueList[i+length-1]-valueList[i]+1 == int32(length) && valueList[i+length-1] < 15 {
+			return true
 		}
-		if valueList[i] > 14 || valueList[i+length] > 14 {
-			continue
-		}
-		if valueList[i] <= key {
-			continue
-		}
-		return true
 	}
 	return false
 }
@@ -421,13 +410,9 @@ func largerLianDui(pais []*Poker, key int32, length int) bool {
 
 	sort.Sort(PaiValueList(values))
 	if len(values) == length {
-		if values[len(values)-1]-values[0] != int32(length) {
-			return false
+		if values[len(values)-1]-values[0]+1 == int32(length) && values[len(values)-1] < 15 {
+			return true
 		}
-		if values[len(values)-1] > 14 {
-			return false
-		}
-		return true
 	}
 	for i := 0; i < len(values)-length; i++ {
 		if values[i+length]-values[i]+1 != int32(length) {

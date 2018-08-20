@@ -328,7 +328,7 @@ func isLianDui_lai(pais []*Poker) (bool, int32) {
 		if p == nil {
 			continue
 		}
-		if paiValue := p.GetValue();  !p.IsLaiZi() && (paiValue == 15 || paiValue == 16 || paiValue == 17){
+		if paiValue := p.GetValue(); !p.IsLaiZi() && (paiValue == 15 || paiValue == 16 || paiValue == 17) {
 			return false, -1
 		}
 	}
@@ -2181,28 +2181,28 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 	//只取一个赖子
 	if laiZiCount >= 1 {
 		//找length长度的list， 不需要赖子的情况
-		for i := 0; i < valueLen-length; i++ {
+		for i := 0; i <= valueLen-length; i++ {
 			//刚好够，不需要赖子
-			if values[i+length]-values[i]+1 == int32(length) {
-				if values[i] > key && values[i+length] < 15 {
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-1] < 15 {
 					return true
 				}
 			}
 		}
 		//找length-1长度的list，需要一个赖子
-		for i := 0; i < valueLen-length+1; i++ {
+		for i := 0; i <= valueLen-length+1; i++ {
 			//长度连续，赖子补在两边
-			if values[i+length-1]-values[i]+1 == int32(length)-1 {
-				if values[i] > key && values[i+length-1]+1 < 15 {
+			if values[i+length-2]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-2]+1 < 15 {
 					return true
 				}
-				if values[i]-1 > key && values[i+length-1] < 15 {
+				if values[i]-1 > key && values[i+length-2] < 15 {
 					return true
 				}
 			}
 			//长度不连续，赖子补在中间
-			if values[i+length-1]-values[i]+1 == int32(length) {
-				if values[i] > key && values[i+length-1] < 15 {
+			if values[i+length-2]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-2] < 15 {
 					return true
 				}
 			}
@@ -2212,56 +2212,8 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 	//取两个赖子,找length-2长度的list,
 	if laiZiCount >= 2 {
 		// 需要两个赖子
-		for i := 0; i < valueLen-length+2; i++ {
+		for i := 0; i <= valueLen-length+2; i++ {
 			//两个赖子都放在两边
-			if values[i+length-2]-values[i]+1 == int32(length) {
-				if values[i] > key && values[i+length-2]+2 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-2]+1 < 15 {
-					return true
-				}
-				if values[i]-2 > key && values[i+length-2] < 15 {
-					return true
-				}
-			}
-			//一个赖子在两边，一个在中间
-			if values[i+length-2]-values[i]+1 == int32(length)-1 {
-				if values[i] > key && values[i+length-2]+1 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-2] < 15 {
-					return true
-				}
-			}
-			//两个赖子都在中间
-			if values[i+length-2]-values[i]+1 == int32(length)-2 {
-				if values[i] > key && values[i+length-2] < 15 {
-					return true
-				}
-			}
-		}
-	}
-
-	//取三个赖子,找length-3长度的list
-	if laiZiCount >= 3 {
-		for i := 0; i < valueLen-length+3; i++ {
-			//三个赖子在两边
-			if values[i+length-3]-values[i]+1 == int32(length)-3 {
-				if values[i] > key && values[i+length-3]+3 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-3]+2 < 15 {
-					return true
-				}
-				if values[i]-2 > key && values[i+length-3]+1 < 15 {
-					return true
-				}
-				if values[i]-3 > key && values[i+length-3] < 15 {
-					return true
-				}
-			}
-			//两个赖子在两边， 一个赖子在中间
 			if values[i+length-3]-values[i]+1 == int32(length)-2 {
 				if values[i] > key && values[i+length-3]+2 < 15 {
 					return true
@@ -2273,7 +2225,7 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 					return true
 				}
 			}
-			//一个赖子在两边，两个赖子在中间
+			//一个赖子在两边，一个在中间
 			if values[i+length-3]-values[i]+1 == int32(length)-1 {
 				if values[i] > key && values[i+length-3]+1 < 15 {
 					return true
@@ -2282,36 +2234,19 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 					return true
 				}
 			}
-			//三个赖子都在中间
+			//两个赖子都在中间
 			if values[i+length-3]-values[i]+1 == int32(length) {
-				return true
+				if values[i] > key && values[i+length-3] < 15 {
+					return true
+				}
 			}
 		}
-
 	}
 
-	//取四个赖子
-	if laiZiCount >= 4 {
-		for i := 0; i < valueLen-length+4; i++ {
-			//四个赖子都在两边
-			if values[i+length-4]-values[i]+1 == int32(length)-4 {
-				if values[i] > key && values[i+length-4]+4 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-4]+3 < 15 {
-					return true
-				}
-				if values[i]-2 > key && values[i+length-4]+2 < 15 {
-					return true
-				}
-				if values[i]-3 > key && values[i+length-4]+1 < 15 {
-					return true
-				}
-				if values[i]-4 > key && values[i+length-4] < 15 {
-					return true
-				}
-			}
-			//一个赖子在中间，其余在两边
+	//取三个赖子,找length-3长度的list
+	if laiZiCount >= 3 {
+		for i := 0; i <= valueLen-length+3; i++ {
+			//三个赖子在两边
 			if values[i+length-4]-values[i]+1 == int32(length)-3 {
 				if values[i] > key && values[i+length-4]+3 < 15 {
 					return true
@@ -2326,7 +2261,7 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 					return true
 				}
 			}
-			//两个赖子在中间，其余在两边
+			//两个赖子在两边， 一个赖子在中间
 			if values[i+length-4]-values[i]+1 == int32(length)-2 {
 				if values[i] > key && values[i+length-4]+2 < 15 {
 					return true
@@ -2338,18 +2273,83 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 					return true
 				}
 			}
-			//三个赖子在中间，其余在两边
+			//一个赖子在两边，两个赖子在中间
 			if values[i+length-4]-values[i]+1 == int32(length)-1 {
 				if values[i] > key && values[i+length-4]+1 < 15 {
 					return true
 				}
-				if values[i]-1 > key && values[i+length-4] < 15 {
+				if values[i]-1 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+			//三个赖子都在中间
+			if values[i+length-4]-values[i]+1 == int32(length) {
+				return true
+			}
+		}
+
+	}
+
+	//取四个赖子
+	if laiZiCount >= 4 {
+		for i := 0; i <= valueLen-length+4; i++ {
+			//四个赖子都在两边
+			if values[i+length-5]-values[i]+1 == int32(length)-4 {
+				if values[i] > key && values[i+length-5]+4 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-5]+3 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-5]+2 < 15 {
+					return true
+				}
+				if values[i]-3 > key && values[i+length-5]+1 < 15 {
+					return true
+				}
+				if values[i]-4 > key && values[i+length-5] < 15 {
+					return true
+				}
+			}
+			//一个赖子在中间，其余在两边
+			if values[i+length-5]-values[i]+1 == int32(length)-3 {
+				if values[i] > key && values[i+length-5]+3 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-5]+2 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-5]+1 < 15 {
+					return true
+				}
+				if values[i]-3 > key && values[i+length-5] < 15 {
+					return true
+				}
+			}
+			//两个赖子在中间，其余在两边
+			if values[i+length-5]-values[i]+1 == int32(length)-2 {
+				if values[i] > key && values[i+length-5]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-5]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-5] < 15 {
+					return true
+				}
+			}
+			//三个赖子在中间，其余在两边
+			if values[i+length-5]-values[i]+1 == int32(length)-1 {
+				if values[i] > key && values[i+length-5]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-5] < 15 {
 					return true
 				}
 			}
 			//四个赖子在中间
-			if values[i+length-4]-values[i]+1 == int32(length) {
-				if values[i] > key && values[i+length-4] < 15 {
+			if values[i+length-5]-values[i]+1 == int32(length) {
+				if values[i] > key && values[i+length-5] < 15 {
 					return true
 				}
 			}
@@ -2386,10 +2386,11 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 		duiZi = append(duiZi, liangzhang...)
 		duiZi = append(duiZi, sanzhang...)
 		duiZi = append(duiZi, sizhang...)
-		if len(duiZi) > length {
-			for i := 0; i < len(duiZi)-length; i++ {
-				if duiZi[i+length]-duiZi[i]+1 == int32(length) {
-					if duiZi[i] > key && duiZi[i+length] < 15 {
+		if len(duiZi) >= length {
+			sort.Sort(PaiValueList(duiZi))
+			for i := 0; i <= len(duiZi)-length; i++ {
+				if duiZi[i+length-1]-duiZi[i]+1 == int32(length) {
+					if duiZi[i] > key && duiZi[i+length-1] < 15 {
 						return true
 					}
 				}
@@ -2397,8 +2398,8 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 		}
 
 		//找一个赖子
-		for i := 0; i < valueLen-length; i++ {
-			if values[i+length]-values[i]+1 == int32(length) {
+		for i := 0; i <= valueLen-length; i++ {
+			if values[i+length-1]-values[i]+1 == int32(length) {
 				var danCount int32 //单张的数量,一张赖子只允许连队中有一个单牌
 				for j := 0; j < length; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
@@ -2408,7 +2409,7 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				if danCount != 1 {
 					continue
 				}
-				if values[i] > key && values[i+length] < 15 {
+				if values[i] > key && values[i+length-1] < 15 {
 					return true
 				}
 			}
@@ -2417,8 +2418,8 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 	//取两个赖子
 	if laiZiCount >= 2 {
 		//两个赖子分别补两个单张
-		for i := 0; i < valueLen-length; i++ {
-			if values[i+length]-values[i]+1 == int32(length) {
+		for i := 0; i <= valueLen-length; i++ {
+			if values[i+length-1]-values[i]+1 == int32(length) {
 				var danCount int32
 				for j := 0; j < length; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
@@ -2428,15 +2429,15 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				if danCount != 2 {
 					continue
 				}
-				if values[i] > key && values[i+length] < 15 {
+				if values[i] > key && values[i+length-1] < 15 {
 					return true
 				}
 			}
 		}
 		//两个赖子补成一个对子
-		for i := 0; i < valueLen-length+1; i++ {
+		for i := 0; i <= valueLen-length+1; i++ {
 			//补的对子在两边
-			if values[i+length-1]-values[i]+1 == int32(length)-1 {
+			if values[i+length-2]-values[i]+1 == int32(length) {
 				var danCount int32
 				for j := 0; j < length-1; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
@@ -2446,10 +2447,10 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				if danCount > 0 {
 					continue
 				}
-				if values[i] > key && values[i+length-1]+1 < 15 {
+				if values[i] > key && values[i+length-2]+1 < 15 {
 					return true
 				}
-				if values[i]-1 > key && values[i+length-1] < 15 {
+				if values[i]-1 > key && values[i+length-2] < 15 {
 					return true
 				}
 			}
@@ -2476,8 +2477,8 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 	//取三个赖子
 	if laiZiCount >= 3 {
 		//三个赖子分别补三个单张，形成对子
-		for i := 0; i < valueLen-length; i++ {
-			if values[i+length]-values[i]+1 == int32(length) {
+		for i := 0; i <= valueLen-length; i++ {
+			if values[i+length-1]-values[i]+1 == int32(length) {
 				var danCount int32
 				for j := 0; j < length; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
@@ -2487,144 +2488,22 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				if danCount != 3 {
 					continue
 				}
-				if values[i] > key && values[i+length] < 15 {
-					return true
-				}
-			}
-		}
-		//三个赖子补一个对子和一个单张
-		for i := 0; i < valueLen-length+1; i++ {
-			//补的对子在两边
-			if values[i+length-1]-values[i]+1 == int32(length)-1 {
-				var danCount int32
-				for j := 0; j < length-1; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount != 1 {
-					continue
-				}
-				if values[i] > key && values[i+length-1]+1 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-1] < 15 {
-					return true
-				}
-			}
-		}
-		//三个赖子补一个对子和一个单张
-		for i := 0; i < valueLen-length+1; i++ {
-			//补的对子在中间
-			if values[i+length-1]-values[i]+1 == int32(length) {
-				var danCount int32
-				for j := 0; j < length-1; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount != 1 {
-					continue
-				}
 				if values[i] > key && values[i+length-1] < 15 {
 					return true
 				}
 			}
 		}
-	}
-	//取四个赖子
-	if laiZiCount >= 4 {
-		//补四个单张
-		for i := 0; i < valueLen-length; i++ {
-			if values[i+length]-values[i]+1 == int32(length) {
-				var danCount int32
-				for j := 0; j < length; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount != 4 {
-					continue
-				}
-				if values[i] > key && values[i+length] < 15 {
-					return true
-				}
-			}
-		}
-		//补两个单张，剩下一个对子
-		for i := 0; i < valueLen-length+1; i++ {
+		//三个赖子补一个对子和一个单张
+		for i := 0; i <= valueLen-length+1; i++ {
 			//补的对子在两边
-			if values[i+length-1]-values[i]+1 == int32(length)-1 {
-				var danCount int32
-				for j := 0; j < length-1; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount != 2 {
-					continue
-				}
-				if values[i] > key && values[i+length-1]+1 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-1] < 15 {
-					return true
-				}
-			}
-		}
-		//补两个单张，剩下一个对子
-		for i := 0; i < valueLen-length+1; i++ {
-			//补的对子在中间
-			if values[i+length-1]-values[i]+1 == int32(length) {
-				var danCount int32
-				for j := 0; j < length-1; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount != 2 {
-					continue
-				}
-				if values[i] > key && values[i+length-1] < 15 {
-					return true
-				}
-			}
-		}
-		//补两个对子
-		for i := 0; i < valueLen-length+2; i++ {
-			//补的对子在两边
-			if values[i+length-2]-values[i]+1 == int32(length)-2 {
-				var danCount int32
-				for j := 0; j < length-2; j++ {
-					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
-						danCount++
-					}
-				}
-				if danCount > 0 {
-					continue
-				}
-				if values[i] > key && values[i+length-2]+2 < 15 {
-					return true
-				}
-				if values[i]-1 > key && values[i+length-2]+1 < 15 {
-					return true
-				}
-				if values[i]-2 > key && values[i+length-2] < 15 {
-					return true
-				}
-			}
-		}
-		//补两个对子
-		for i := 0; i < valueLen-length+2; i++ {
-			//补的对子一个在中间一个在两边
 			if values[i+length-2]-values[i]+1 == int32(length)-1 {
 				var danCount int32
-				for j := 0; j < length-2; j++ {
+				for j := 0; j < length-1; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
 						danCount++
 					}
 				}
-				if danCount > 0 {
+				if danCount != 1 {
 					continue
 				}
 				if values[i] > key && values[i+length-2]+1 < 15 {
@@ -2635,10 +2514,87 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				}
 			}
 		}
-		//补两个对子
-		for i := 0; i < valueLen-length+2; i++ {
-			//补的对子都在中间
+		//三个赖子补一个对子和一个单张
+		for i := 0; i <= valueLen-length+1; i++ {
+			//补的对子在中间
 			if values[i+length-2]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 1 {
+					continue
+				}
+				if values[i] > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+	}
+	//取四个赖子
+	if laiZiCount >= 4 {
+		//补四个单张
+		for i := 0; i <= valueLen-length; i++ {
+			if values[i+length-1]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 4 {
+					continue
+				}
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个单张，剩下一个对子
+		for i := 0; i <= valueLen-length+1; i++ {
+			//补的对子在两边
+			if values[i+length-2]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i] > key && values[i+length-2]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个单张，剩下一个对子
+		for i := 0; i <= valueLen-length+1; i++ {
+			//补的对子在中间
+			if values[i+length-2]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i] > key && values[i+length-2] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i <= valueLen-length+2; i++ {
+			//补的对子在两边
+			if values[i+length-3]-values[i]+1 == int32(length)-2 {
 				var danCount int32
 				for j := 0; j < length-2; j++ {
 					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
@@ -2648,7 +2604,52 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 				if danCount > 0 {
 					continue
 				}
-				if values[i] > key && values[i+length-2] < 15 {
+				if values[i] > key && values[i+length-3]+2 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-3]+1 < 15 {
+					return true
+				}
+				if values[i]-2 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i <= valueLen-length+2; i++ {
+			//补的对子一个在中间一个在两边
+			if values[i+length-3]-values[i]+1 == int32(length)-1 {
+				var danCount int32
+				for j := 0; j < length-2; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-3]+1 < 15 {
+					return true
+				}
+				if values[i]-1 > key && values[i+length-3] < 15 {
+					return true
+				}
+			}
+		}
+		//补两个对子
+		for i := 0; i <= valueLen-length+2; i++ {
+			//补的对子都在中间
+			if values[i+length-3]-values[i]+1 == int32(length) {
+				var danCount int32
+				for j := 0; j < length-2; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount > 0 {
+					continue
+				}
+				if values[i] > key && values[i+length-3] < 15 {
 					return true
 				}
 			}
