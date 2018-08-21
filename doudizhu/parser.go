@@ -468,7 +468,7 @@ func largerAirDaiDan(pais []*Poker, key int32, length int) bool {
 }
 
 //比指定key大的飞机带对子
-func largerAireDaiDui(pais []*Poker, key int32, length int) bool {
+func largerAirDaiDui(pais []*Poker, key int32, length int) bool {
 	paiCount := len(pais)
 	if paiCount < length*5 {
 		return false
@@ -477,7 +477,7 @@ func largerAireDaiDui(pais []*Poker, key int32, length int) bool {
 	if largerAirBuDai(pais, key, length) {
 		sanzhang := getPaiValueByCount(pais, 3)
 		duizi := getPaiValueByCount(pais, 2)
-		if len(sanzhang) > length+1 || len(duizi) >= length {
+		if len(sanzhang) >= length+1 || len(duizi) >= length {
 			return true
 		}
 	}
