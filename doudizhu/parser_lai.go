@@ -2659,6 +2659,673 @@ func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 	return false
 }
 
+//比指定key大的飞机不带牌
+func largerAirBuDai_lai(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length*3 || paiCount > 15 {
+		return false
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	if laiZiCount == 0 {
+		return largerAirBuDai(pais, key, length)
+	}
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+	sizhang := getPaiValueByCount(notLaiZi, 4)
+	//找一个赖子
+	if laiZiCount >= 1 {
+		//不需要赖子的情况
+		var sanValues []int32
+		sanValues = append(sanValues, sanzhang...)
+		sanValues = append(sanValues, sizhang...)
+		if sanLen := len(sanValues); sanLen >= length {
+			sort.Sort(PaiValueList(sanValues))
+			for i := 0; i <= sanLen-length; i++ {
+				if sanValues[i+length-1]-sanValues[i]+1 == int32(length) {
+					if sanValues[i] > key && sanValues[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+		//需要一个赖子
+		var values []int32
+		values = append(values, liangzhang...)
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length {
+			for i := 0; i <= valueLen-length; i++ {
+				var duiCount int32 //两张的数量
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if duiCount != 1 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	//找两个赖子
+	if laiZiCount >= 2 {
+		//两个赖子补两个两张
+		var values []int32
+		values = append(values, liangzhang...)
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length {
+			for i := 0; i <= valueLen-length; i++ {
+				var duiCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if duiCount != 2 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+		//两个赖子补一个单张
+		values = []int32{}
+		values = append(values, danzhang...)
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length {
+			for i := 0; i <= valueLen-length; i++ {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 1 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	//找三个赖子
+	if laiZiCount >= 3 {
+		//三个赖子补三个两张
+		var values []int32
+		values = append(values, liangzhang...)
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length {
+			for i := 0; i <= valueLen-length; i++ {
+				var duiCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if duiCount != 3 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+		//三个赖子补一个对子和一个单张
+		values = append(values, danzhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length {
+			for i := 0; i <= valueLen-length; i++ {
+				var danCount, duiCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if danCount != 1 || duiCount != 1 {
+					continue
+				}
+				if values[i] > key && values[i+length-1] < 15 {
+					return true
+				}
+			}
+		}
+
+		//三个赖子补一个三张
+		values = []int32{}
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		sort.Sort(PaiValueList(values))
+		if valueLen := len(values); valueLen >= length-1 {
+			for i := 0; i <= valueLen-length+1; i++ {
+				//补的三张在两边
+				if values[i+length-2]-values[i]+1 == int32(length)-1 {
+					if values[i] > key && values[i+length-2]+1 < 15 {
+						return true
+					}
+					if values[i]-1 > key && values[i+length-2] < 15 {
+						return true
+					}
+				}
+				//补的三张在中间
+				if values[i+length-2]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-2] < 15 {
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	//找四个赖子
+	if laiZiCount >= 4 {
+		var values []int32
+		values = append(values, sanzhang...)
+		values = append(values, sizhang...)
+		//四个赖子补四个两张
+		if length >= 4 {
+			values = append(values, liangzhang...)
+			if valueLen := len(values); valueLen >= length {
+				sort.Sort(PaiValueList(values))
+				for i := 0; i <= valueLen-length; i++ {
+					var duiCount int32
+					for j := 0; j < length; j++ {
+						if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+							duiCount++
+						}
+					}
+					if duiCount != 4 {
+						continue
+					}
+					if values[i+length-1]-values[i]+1 == int32(length) {
+						if values[i] > key && values[i+length-1] < 15 {
+							return true
+						}
+					}
+				}
+			}
+		}
+		//补两个两张，一个一张
+		values = append(values, danzhang...)
+		if length < 4 {
+			values = append(values, liangzhang...)
+		}
+		if valueLen := len(values); valueLen >= length {
+			sort.Sort(PaiValueList(values))
+			for i := 0; i <= valueLen-length; i++ {
+				var danCount, duiCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if danCount != 1 || duiCount != 2 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+		//补一个两张，一个三张
+		values = []int32{}
+		values = append(values, sizhang...)
+		values = append(values, sanzhang...)
+		values = append(values, liangzhang...)
+		if valueLen := len(values); valueLen >= length-1 {
+			sort.Sort(PaiValueList(values))
+			for i := 0; i <= valueLen-length+1; i++ {
+				var duiCount int32
+				for j := 0; j < length-1; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 2 {
+						duiCount++
+					}
+				}
+				if duiCount != 1 {
+					continue
+				}
+				//补的三张在两边
+				if values[i+length-2]-values[i]+1 == int32(length)-1 {
+					if values[i] > key && values[i+length-2]+1 < 15 {
+						return true
+					}
+					if values[i]-1 > key && values[i+length-2] < 15 {
+						return true
+					}
+				}
+				//补的三张在中间
+				if values[i+length-2]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-2] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+		//补两个单张
+		values = []int32{}
+		values = append(values, sizhang...)
+		values = append(values, sanzhang...)
+		values = append(values, danzhang...)
+		if valueLen := len(values); valueLen >= length {
+			sort.Sort(PaiValueList(values))
+			for i := 0; i <= valueLen-length; i++ {
+				var danCount int32
+				for j := 0; j < length; j++ {
+					if getPaiCountByValue(notLaiZi, values[i+j]) == 1 {
+						danCount++
+					}
+				}
+				if danCount != 2 {
+					continue
+				}
+				if values[i+length-1]-values[i]+1 == int32(length) {
+					if values[i] > key && values[i+length-1] < 15 {
+						return true
+					}
+				}
+			}
+		}
+
+	}
+	return false
+}
+
+//比指定key大的飞机带单牌
+func largerAirDaiDan_lai(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length*4 || paiCount > 16 {
+		return false
+	}
+
+	return largerAirBuDai_lai(pais, key, length)
+}
+
+//比指定key大的飞机带对子
+func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
+	paiCount := len(pais)
+	if paiCount < length*5 || paiCount > 15 {
+		return false
+	}
+
+	//找对子，找到对子后判断剩下的牌是否有比key大的飞机不带牌牌型
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	if laiZiCount == 0 {
+		return largerAirDaiDui(pais, key, length)
+	}
+
+	danzhang := getPaiValueByCount(notLaiZi, 1)
+	liangzhang := getPaiValueByCount(notLaiZi, 2)
+	sanzhang := getPaiValueByCount(notLaiZi, 3)
+	sizhang := getPaiValueByCount(notLaiZi, 4)
+
+	var values []int32
+	values = append(values, liangzhang...)
+	values = append(values, sanzhang...)
+	values = append(values, sizhang...)
+	valueLen := len(values)
+	danzhangLen := len(danzhang)
+
+	if length == 2 {
+		if laiZiCount >= 1 {
+			//不找赖子
+			if valueLen >= length {
+				for i := 0; i < valueLen-1; i++ {
+					for j := i + 1; j < valueLen; j++ {
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[j], newPais)
+						newPais = delPokerFromPaisByValue(values[j], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+			//取一个赖子作为带的对子
+			if danzhangLen > 0 {
+				for i := 0; i < valueLen; i++ {
+					for j := 0; j < danzhangLen; j++ {
+						if danzhang[j] == 16 || danzhang[j] == 17 {
+							continue
+						}
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisById(laiZi[0], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+		}
+
+		if laiZiCount >= 2 {
+			//取两个赖子作为带牌
+			//两个赖子补两个单张,作为两个对子
+			if danzhangLen >= length {
+				for i := 0; i < danzhangLen-1; i++ {
+					for j := i + 1; j < danzhangLen; j++ {
+						if danzhang[i] > 15 || danzhang[j] > 15 {
+							continue
+						}
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisById(laiZi[0], newPais)
+						newPais = delPokerFromPaisById(laiZi[1], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[i], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+			//两个赖子作为一个对子
+			if valueLen >= 1 {
+				for i := 0; i < valueLen; i++ {
+					newPais := util.DeepClone(pais).([]*Poker)
+					newPais = delPokerFromPaisById(laiZi[0], newPais)
+					newPais = delPokerFromPaisById(laiZi[1], newPais)
+					newPais = delPokerFromPaisByValue(values[i], newPais)
+					newPais = delPokerFromPaisByValue(values[i], newPais)
+					if largerAirBuDai_lai(newPais, key, length) {
+						return true
+					}
+				}
+			}
+		}
+
+		if laiZiCount >= 3 {
+			//取三个赖子作为带牌
+			for i := 0; i < danzhangLen; i++ {
+				if danzhang[i] > 15 {
+					continue
+				}
+				newPais := util.DeepClone(pais).([]*Poker)
+				newPais = delPokerFromPaisById(laiZi[0], newPais)
+				newPais = delPokerFromPaisById(laiZi[1], newPais)
+				newPais = delPokerFromPaisById(laiZi[2], newPais)
+				newPais = delPokerFromPaisByValue(danzhang[i], newPais)
+				if largerAirBuDai_lai(newPais, key, length) {
+					return true
+				}
+			}
+		}
+
+		if laiZiCount >= 4 {
+			newPais := util.DeepClone(pais).([]*Poker)
+			newPais = delPokerFromPaisById(laiZi[0], newPais)
+			newPais = delPokerFromPaisById(laiZi[1], newPais)
+			newPais = delPokerFromPaisById(laiZi[2], newPais)
+			newPais = delPokerFromPaisById(laiZi[3], newPais)
+			if largerAirBuDai_lai(newPais, key, length) {
+				return true
+			}
+		}
+	}
+
+	if length == 3 {
+		if laiZiCount >= 1 {
+			//不找赖子
+			if valueLen >= length {
+				for i := 0; i < length-2; i++ {
+					for j := i + 1; j < length-1; j++ {
+						for k := j + 1; k < length; k++ {
+							newPais := util.DeepClone(pais).([]*Poker)
+							newPais = delPokerFromPaisByValue(values[i], newPais)
+							newPais = delPokerFromPaisByValue(values[i], newPais)
+							newPais = delPokerFromPaisByValue(values[j], newPais)
+							newPais = delPokerFromPaisByValue(values[j], newPais)
+							newPais = delPokerFromPaisByValue(values[k], newPais)
+							newPais = delPokerFromPaisByValue(values[k], newPais)
+							if largerAirBuDai_lai(newPais, key, length) {
+								return true
+							}
+						}
+					}
+				}
+			}
+
+			//找一个赖子作为带牌
+			if danzhangLen > 0 {
+				if valueLen >= length-1 {
+					for i := 0; i < valueLen-1; i++ {
+						for j := i + 1; j < valueLen; j++ {
+							for k := 0; k < danzhangLen; k++ {
+								if danzhang[k] > 15 {
+									continue
+								}
+								newPais := util.DeepClone(pais).([]*Poker)
+								newPais = delPokerFromPaisById(laiZi[0], newPais)
+								newPais = delPokerFromPaisByValue(danzhang[k], newPais)
+								newPais = delPokerFromPaisByValue(values[i], newPais)
+								newPais = delPokerFromPaisByValue(values[i], newPais)
+								newPais = delPokerFromPaisByValue(values[j], newPais)
+								newPais = delPokerFromPaisByValue(values[j], newPais)
+								if largerAirBuDai_lai(newPais, key, length) {
+									return true
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if laiZiCount >= 2 {
+			//找两个赖子作为带牌
+			//两个赖子补两张单牌
+			if valueLen > 0 && danzhangLen > 1 {
+				for i := 0; i < valueLen; i++ {
+					for j := 0; j < danzhangLen-1; j++ {
+						for k := j + 1; k < danzhangLen; k++ {
+							if danzhang[j] > 15 || danzhang[k] > 15 {
+								continue
+							}
+							newPais := util.DeepClone(pais).([]*Poker)
+							newPais = delPokerFromPaisById(laiZi[0], newPais)
+							newPais = delPokerFromPaisById(laiZi[1], newPais)
+							newPais = delPokerFromPaisByValue(values[i], newPais)
+							newPais = delPokerFromPaisByValue(values[i], newPais)
+							newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+							newPais = delPokerFromPaisByValue(danzhang[k], newPais)
+							if largerAirBuDai_lai(newPais, key, length) {
+								return true
+							}
+						}
+					}
+				}
+			}
+			//两个赖子补一个对子
+			if valueLen >= 2 {
+				for i := 0; i < valueLen-1; i++ {
+					for j := i + 1; j < valueLen; j++ {
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisById(laiZi[0], newPais)
+						newPais = delPokerFromPaisById(laiZi[1], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[j], newPais)
+						newPais = delPokerFromPaisByValue(values[j], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+		}
+		if laiZiCount >= 3 {
+			//取三个赖子
+			//三个赖子补三个单张
+			if danzhangLen >= 3 {
+				for i := 0; i < danzhangLen-2; i++ {
+					for j := i + 1; j < danzhangLen-1; j++ {
+						for k := j + 1; k < danzhangLen; k++ {
+							if danzhang[i] > 15 || danzhang[j] > 15 || danzhang[k] > 15 {
+								continue
+							}
+							newPais := util.DeepClone(pais).([]*Poker)
+							newPais = delPokerFromPaisById(laiZi[0], newPais)
+							newPais = delPokerFromPaisById(laiZi[1], newPais)
+							newPais = delPokerFromPaisById(laiZi[2], newPais)
+							newPais = delPokerFromPaisByValue(danzhang[i], newPais)
+							newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+							newPais = delPokerFromPaisByValue(danzhang[k], newPais)
+							if largerAirBuDai_lai(newPais, key, length) {
+								return true
+							}
+						}
+					}
+				}
+			}
+			//三个赖子，补一个对子和一个单张
+			if danzhangLen > 0 && valueLen > 0 {
+				for i := 0; i < valueLen; i++ {
+					for j := 0; j < danzhangLen; j++ {
+						if danzhang[j] > 15 {
+							continue
+						}
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisById(laiZi[0], newPais)
+						newPais = delPokerFromPaisById(laiZi[1], newPais)
+						newPais = delPokerFromPaisById(laiZi[2], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						newPais = delPokerFromPaisByValue(values[i], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+		}
+		if laiZiCount >= 4 {
+			//四个赖子补一个对子和两个单张
+			if valueLen > 0 && danzhangLen >= 2 {
+				for j := 0; j < danzhangLen-1; j++ {
+					for k := j + 1; k < danzhangLen; k++ {
+						if danzhang[j] > 15 || danzhang[k] > 15 {
+							continue
+						}
+						newPais := util.DeepClone(pais).([]*Poker)
+						newPais = delPokerFromPaisById(laiZi[0], newPais)
+						newPais = delPokerFromPaisById(laiZi[1], newPais)
+						newPais = delPokerFromPaisById(laiZi[2], newPais)
+						newPais = delPokerFromPaisById(laiZi[3], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[j], newPais)
+						newPais = delPokerFromPaisByValue(danzhang[k], newPais)
+						if largerAirBuDai_lai(newPais, key, length) {
+							return true
+						}
+					}
+				}
+			}
+			//四个赖子补两个对子
+			if valueLen > 0 {
+				for i := 0; i < valueLen; i++ {
+					newPais := util.DeepClone(pais).([]*Poker)
+					newPais = delPokerFromPaisById(laiZi[0], newPais)
+					newPais = delPokerFromPaisById(laiZi[1], newPais)
+					newPais = delPokerFromPaisById(laiZi[2], newPais)
+					newPais = delPokerFromPaisById(laiZi[3], newPais)
+					newPais = delPokerFromPaisByValue(values[i], newPais)
+					newPais = delPokerFromPaisByValue(values[i], newPais)
+					if largerAirBuDai_lai(newPais, key, length) {
+						return true
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+//比指定key大的炸弹，纯赖子炸弹比普通炸弹获取带赖子的炸弹大
+func largerBoom_lai(pais []*Poker, key int32) bool {
+	paiCount := len(pais)
+	if paiCount < 4 {
+		return false
+	}
+	laiZi, notLaiZi := getLaiZiFromPais(pais)
+	laiZiCount := len(laiZi)
+
+	if laiZiCount == 0 {
+		return largerBoom(pais, key)
+	}
+	if laiZiCount >= 1 {
+		if sanzhang := getPaiValueByCount(notLaiZi, 3); len(sanzhang) > 0 {
+			for _, v := range sanzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+
+	}
+	if laiZiCount >= 2 {
+		if liangzhang := getPaiValueByCount(notLaiZi, 2); len(liangzhang) > 0 {
+			for _, v := range liangzhang {
+				if v > key {
+					return true
+				}
+			}
+		}
+	}
+	if laiZiCount >= 3 {
+		if danzhang := getPaiValueByCount(notLaiZi, 1); len(danzhang) > 0 {
+			for _, v := range danzhang {
+				if v <= 15 && v > key {
+					return true
+				}
+			}
+		}
+	}
+	if laiZiCount >= 4 {
+		return true
+	}
+	return false
+}
+
 //获取一组牌中的赖子牌
 func getLaiZiFromPais(pais []*Poker) (laizi []*Poker, notLaiZi []*Poker) {
 	for _, p := range pais {
