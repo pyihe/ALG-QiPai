@@ -431,32 +431,28 @@ func largerLianDui(pais []*Poker, key int32, length int) bool {
 
 //比指定key大的飞机不带牌
 func largerAirBuDai(pais []*Poker, key int32, length int) bool {
-	values := getPaiValueByCount(pais, 3)
+	sanzhang := getPaiValueByCount(pais, 3)
+	sizhang := getPaiValueByCount(pais, 4)
+	var values []int32
+	values = append(values, sanzhang...)
+	values = append(values, sizhang...)
+
 	if len(values) < length {
 		return false
 	}
 
 	sort.Sort(PaiValueList(values))
-	if len(values) == length {
-		if values[len(values)-1]-values[0] != int32(length) {
-			return false
+	valueLen := len(values)
+
+	if valueLen == length {
+		if values[valueLen-1] - values[0] == int32(length) && values[0] > key && values[valueLen-1] < 15 {
+			return true
 		}
-		if values[len(values)-1] > 14 {
-			return false
-		}
-		return true
 	}
-	for i := 0; i < len(values)-length+1; i++ {
-		if values[i+length-1]-values[i]+1 != int32(length) {
-			continue
+	for i := 0; i <= valueLen-length; i++ {
+		if values[i+length-1] - values[i] + 1 == int32(length) && values[i] > key && values[i+length-1] < 15 {
+			return true
 		}
-		if values[i] > 14 || values[i+length-1] > 14 {
-			continue
-		}
-		if values[i] <= key {
-			continue
-		}
-		return true
 	}
 	return false
 }
@@ -472,7 +468,7 @@ func largerAirDaiDan(pais []*Poker, key int32, length int) bool {
 }
 
 //比指定key大的飞机带对子
-func largerAireDaiDui(pais []*Poker, key int32, length int) bool {
+func largerAirDaiDui(pais []*Poker, key int32, length int) bool {
 	paiCount := len(pais)
 	if paiCount < length*5 {
 		return false
@@ -481,7 +477,7 @@ func largerAireDaiDui(pais []*Poker, key int32, length int) bool {
 	if largerAirBuDai(pais, key, length) {
 		sanzhang := getPaiValueByCount(pais, 3)
 		duizi := getPaiValueByCount(pais, 2)
-		if len(sanzhang) > length+1 || len(duizi) >= length {
+		if len(sanzhang) >= length+1 || len(duizi) >= length {
 			return true
 		}
 	}
