@@ -2361,7 +2361,7 @@ func largerShunZi_lai(pais []*Poker, key int32, length int) bool {
 //比指定key大的连对
 func largerLianDui_lai(pais []*Poker, key int32, length int) bool {
 	paiCount := len(pais)
-	if paiCount < 6 {
+	if paiCount < length*2 {
 		return false
 	}
 
