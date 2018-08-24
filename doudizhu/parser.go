@@ -382,12 +382,12 @@ func largerShunZi(pais []*Poker, key int32, length int) bool {
 	}
 	sort.Sort(PaiValueList(valueList))
 	if len(valueList) == length {
-		if valueList[len(valueList)-1]-valueList[0]+1 == int32(length) && valueList[len(valueList)-1] < 15 {
+		if valueList[len(valueList)-1]-valueList[0]+1 == int32(length) && valueList[0] > key && valueList[len(valueList)-1] < 15 {
 			return true
 		}
 	}
 	for i := 0; i < len(valueList)-length; i++ {
-		if valueList[i+length-1]-valueList[i]+1 == int32(length) && valueList[i+length-1] < 15 {
+		if valueList[i] > key && valueList[i+length-1]-valueList[i]+1 == int32(length) && valueList[i+length-1] < 15 {
 			return true
 		}
 	}
