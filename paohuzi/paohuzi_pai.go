@@ -9,91 +9,91 @@ package paohuzi
 
 const PHZ_ALLPOKER_NUM int32 = 80 //所有牌的数量
 
-var PokerMap map[int32]string
+var pokerMap map[int32]string
 
 func init() {
-	PokerMap = make(map[int32]string, PHZ_ALLPOKER_NUM)
-	PokerMap[0] = ""
-	PokerMap[1] = "Black_Y_11"
-	PokerMap[2] = "Black_Y_11"
-	PokerMap[3] = "Black_Y_11"
-	PokerMap[4] = "Black_Y_11"
-	PokerMap[5] = "Black_N_1"
-	PokerMap[6] = "Black_N_1"
-	PokerMap[7] = "Black_N_1"
-	PokerMap[8] = "Black_N_1"
-	PokerMap[9] = "Red_Y_12"
-	PokerMap[10] = "Red_Y_12"
-	PokerMap[11] = "Red_Y_12"
-	PokerMap[12] = "Red_Y_12"
-	PokerMap[13] = "Red_N_2"
-	PokerMap[14] = "Red_N_2"
-	PokerMap[15] = "Red_N_2"
-	PokerMap[16] = "Red_N_2"
-	PokerMap[17] = "Black_Y_13"
-	PokerMap[18] = "Black_Y_13"
-	PokerMap[19] = "Black_Y_13"
-	PokerMap[20] = "Black_Y_13"
-	PokerMap[21] = "Black_N_3"
-	PokerMap[22] = "Black_N_3"
-	PokerMap[23] = "Black_N_3"
-	PokerMap[24] = "Black_N_3"
-	PokerMap[25] = "Black_Y_14"
-	PokerMap[26] = "Black_Y_14"
-	PokerMap[27] = "Black_Y_14"
-	PokerMap[28] = "Black_Y_14"
-	PokerMap[29] = "Black_N_4"
-	PokerMap[30] = "Black_N_4"
-	PokerMap[31] = "Black_N_4"
-	PokerMap[32] = "Black_N_4"
-	PokerMap[33] = "Black_Y_15"
-	PokerMap[34] = "Black_Y_15"
-	PokerMap[35] = "Black_Y_15"
-	PokerMap[36] = "Black_Y_15"
-	PokerMap[37] = "Black_N_5"
-	PokerMap[38] = "Black_N_5"
-	PokerMap[39] = "Black_N_5"
-	PokerMap[40] = "Black_N_5"
-	PokerMap[41] = "Black_Y_16"
-	PokerMap[42] = "Black_Y_16"
-	PokerMap[43] = "Black_Y_16"
-	PokerMap[44] = "Black_Y_16"
-	PokerMap[45] = "Black_N_6"
-	PokerMap[46] = "Black_N_6"
-	PokerMap[47] = "Black_N_6"
-	PokerMap[48] = "Black_N_6"
-	PokerMap[49] = "Red_Y_17"
-	PokerMap[50] = "Red_Y_17"
-	PokerMap[51] = "Red_Y_17"
-	PokerMap[52] = "Red_Y_17"
-	PokerMap[53] = "Red_N_7"
-	PokerMap[54] = "Red_N_7"
-	PokerMap[55] = "Red_N_7"
-	PokerMap[56] = "Red_N_7"
-	PokerMap[57] = "Black_Y_18"
-	PokerMap[58] = "Black_Y_18"
-	PokerMap[59] = "Black_Y_18"
-	PokerMap[60] = "Black_Y_18"
-	PokerMap[61] = "Black_N_8"
-	PokerMap[62] = "Black_N_8"
-	PokerMap[63] = "Black_N_8"
-	PokerMap[64] = "Black_N_8"
-	PokerMap[65] = "Black_Y_19"
-	PokerMap[66] = "Black_Y_19"
-	PokerMap[67] = "Black_Y_19"
-	PokerMap[68] = "Black_Y_19"
-	PokerMap[69] = "Black_N_9"
-	PokerMap[70] = "Black_N_9"
-	PokerMap[71] = "Black_N_9"
-	PokerMap[72] = "Black_N_9"
-	PokerMap[73] = "Red_Y_20"
-	PokerMap[74] = "Red_Y_20"
-	PokerMap[75] = "Red_Y_20"
-	PokerMap[76] = "Red_Y_20"
-	PokerMap[77] = "Red_N_10"
-	PokerMap[78] = "Red_N_10"
-	PokerMap[79] = "Red_N_10"
-	PokerMap[80] = "Red_N_10"
+	pokerMap = make(map[int32]string, PHZ_ALLPOKER_NUM)
+	pokerMap[0] = ""
+	pokerMap[1] = "Black_Y_11"
+	pokerMap[2] = "Black_Y_11"
+	pokerMap[3] = "Black_Y_11"
+	pokerMap[4] = "Black_Y_11"
+	pokerMap[5] = "Black_N_1"
+	pokerMap[6] = "Black_N_1"
+	pokerMap[7] = "Black_N_1"
+	pokerMap[8] = "Black_N_1"
+	pokerMap[9] = "Red_Y_12"
+	pokerMap[10] = "Red_Y_12"
+	pokerMap[11] = "Red_Y_12"
+	pokerMap[12] = "Red_Y_12"
+	pokerMap[13] = "Red_N_2"
+	pokerMap[14] = "Red_N_2"
+	pokerMap[15] = "Red_N_2"
+	pokerMap[16] = "Red_N_2"
+	pokerMap[17] = "Black_Y_13"
+	pokerMap[18] = "Black_Y_13"
+	pokerMap[19] = "Black_Y_13"
+	pokerMap[20] = "Black_Y_13"
+	pokerMap[21] = "Black_N_3"
+	pokerMap[22] = "Black_N_3"
+	pokerMap[23] = "Black_N_3"
+	pokerMap[24] = "Black_N_3"
+	pokerMap[25] = "Black_Y_14"
+	pokerMap[26] = "Black_Y_14"
+	pokerMap[27] = "Black_Y_14"
+	pokerMap[28] = "Black_Y_14"
+	pokerMap[29] = "Black_N_4"
+	pokerMap[30] = "Black_N_4"
+	pokerMap[31] = "Black_N_4"
+	pokerMap[32] = "Black_N_4"
+	pokerMap[33] = "Black_Y_15"
+	pokerMap[34] = "Black_Y_15"
+	pokerMap[35] = "Black_Y_15"
+	pokerMap[36] = "Black_Y_15"
+	pokerMap[37] = "Black_N_5"
+	pokerMap[38] = "Black_N_5"
+	pokerMap[39] = "Black_N_5"
+	pokerMap[40] = "Black_N_5"
+	pokerMap[41] = "Black_Y_16"
+	pokerMap[42] = "Black_Y_16"
+	pokerMap[43] = "Black_Y_16"
+	pokerMap[44] = "Black_Y_16"
+	pokerMap[45] = "Black_N_6"
+	pokerMap[46] = "Black_N_6"
+	pokerMap[47] = "Black_N_6"
+	pokerMap[48] = "Black_N_6"
+	pokerMap[49] = "Red_Y_17"
+	pokerMap[50] = "Red_Y_17"
+	pokerMap[51] = "Red_Y_17"
+	pokerMap[52] = "Red_Y_17"
+	pokerMap[53] = "Red_N_7"
+	pokerMap[54] = "Red_N_7"
+	pokerMap[55] = "Red_N_7"
+	pokerMap[56] = "Red_N_7"
+	pokerMap[57] = "Black_Y_18"
+	pokerMap[58] = "Black_Y_18"
+	pokerMap[59] = "Black_Y_18"
+	pokerMap[60] = "Black_Y_18"
+	pokerMap[61] = "Black_N_8"
+	pokerMap[62] = "Black_N_8"
+	pokerMap[63] = "Black_N_8"
+	pokerMap[64] = "Black_N_8"
+	pokerMap[65] = "Black_Y_19"
+	pokerMap[66] = "Black_Y_19"
+	pokerMap[67] = "Black_Y_19"
+	pokerMap[68] = "Black_Y_19"
+	pokerMap[69] = "Black_N_9"
+	pokerMap[70] = "Black_N_9"
+	pokerMap[71] = "Black_N_9"
+	pokerMap[72] = "Black_N_9"
+	pokerMap[73] = "Red_Y_20"
+	pokerMap[74] = "Red_Y_20"
+	pokerMap[75] = "Red_Y_20"
+	pokerMap[76] = "Red_Y_20"
+	pokerMap[77] = "Red_N_10"
+	pokerMap[78] = "Red_N_10"
+	pokerMap[79] = "Red_N_10"
+	pokerMap[80] = "Red_N_10"
 }
 
 type PengPai struct {
@@ -165,12 +165,12 @@ func (p *PHZPoker) IsBig() bool {
 	return p.BigWord
 }
 
-func (p *PHZPoker) GetPaiIndexByValue() int32 {
+func (p *PHZPoker) getPaiIndexByValue() int32 {
 	//根据牌的value和花色返回index，此处的index用于统计牌的张数
 	return p.GetValue()
 }
 
-func CountHandPais(pais []*PHZPoker) []int {
+func countHandPais(pais []*PHZPoker) []int {
 	counts := make([]int, TotalPaiValueCount+1) //牌值1——10:小字  11——20:大字
 	if pais == nil || len(pais) == 0 {
 		return nil
@@ -179,16 +179,16 @@ func CountHandPais(pais []*PHZPoker) []int {
 		if p == nil {
 			continue
 		}
-		if p.GetPaiIndexByValue() == 0 {
+		if p.getPaiIndexByValue() == 0 {
 			return nil
 		}
-		counts[p.GetPaiIndexByValue()]++
+		counts[p.getPaiIndexByValue()]++
 	}
 	return counts
 }
 
 //根据牌值找到一组牌里几张相同牌值的牌
-func GetSameValuePaisByValue(handPokers []*PHZPoker, value int32) []*PHZPoker {
+func getSameValuePaisByValue(handPokers []*PHZPoker, value int32) []*PHZPoker {
 	retPais := []*PHZPoker{}
 	for _, poker := range handPokers {
 		if poker == nil {
@@ -202,7 +202,7 @@ func GetSameValuePaisByValue(handPokers []*PHZPoker, value int32) []*PHZPoker {
 }
 
 //从一组牌中删除指定ID的一张牌
-func DelPaiFromPokersByID(handPokers []*PHZPoker, poker *PHZPoker) []*PHZPoker {
+func delPaiFromPokersByID(handPokers []*PHZPoker, poker *PHZPoker) []*PHZPoker {
 	for i, p := range handPokers {
 		if p.GetId() == poker.GetId() {
 			handPokers = append(handPokers[:i], handPokers[i+1:]...)
@@ -213,7 +213,7 @@ func DelPaiFromPokersByID(handPokers []*PHZPoker, poker *PHZPoker) []*PHZPoker {
 }
 
 //根据牌值在手牌中找相应的poker
-func GetPaiByValue(handPokers []*PHZPoker, value int32) *PHZPoker {
+func getPaiByValue(handPokers []*PHZPoker, value int32) *PHZPoker {
 	for _, poker := range handPokers {
 		if poker == nil {
 			continue
@@ -226,7 +226,7 @@ func GetPaiByValue(handPokers []*PHZPoker, value int32) *PHZPoker {
 }
 
 //删除一张指定牌值的牌
-func DelPaiFromPokers(handPokers []*PHZPoker, poker *PHZPoker) []*PHZPoker {
+func delPaiFromPokers(handPokers []*PHZPoker, poker *PHZPoker) []*PHZPoker {
 	if poker == nil {
 		return handPokers
 	}
