@@ -298,3 +298,16 @@ func xiPai(startIndex int, paiCount int) []uint8 {
 	}
 	return result
 }
+
+//增加shuffle洗牌算法
+func shuffleXiPai(paiCount int) []int {
+	var result = make([]int, paiCount)
+	for i := 0; i < paiCount; i++ {
+		result[i] = i + 1
+	}
+	for i := paiCount - 1; i > 0; i-- {
+		randIndex := rand.Intn(i)
+		result[i], result[randIndex] = result[randIndex], result[i]
+	}
+	return result
+}
