@@ -1,12 +1,5 @@
 package paohuzi
 
-/*
-    @Create by GoLand
-    @Author: hong
-    @Time: 2018/10/11 11:42 
-    @File: paohuzi_pai.go    
-*/
-
 const PHZ_ALLPOKER_NUM int32 = 80 //所有牌的数量
 
 var pokerMap map[int32]string

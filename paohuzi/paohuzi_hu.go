@@ -4,13 +4,6 @@ import (
 	"fmt"
 )
 
-/*
-    @Create by GoLand
-    @Author: hong
-    @Time: 2018/10/11 11:52 
-    @File: paohuzi_hu.go    
-*/
-
 //牌局过程中的数据
 type GameInfo struct {
 	HandPokers []*PHZPoker //手牌信息
