@@ -1,13 +1,10 @@
 package mj_sichuan
 
-import "fmt"
-
 //判断一手牌是否可以胡，这里的手牌包含了碰、杠到桌面的牌
 func canHu(pais []*MjPai) (canHu, is19 bool, jiangPaiValue uint8) {
 	paiCount := len(pais)
 	//先判断牌的张数，胡牌必须满足14张牌
 	if paiCount != 14 {
-		fmt.Printf("胡牌张数不对: [%v]", paiCount)
 		return
 	}
 
@@ -26,8 +23,6 @@ func getPaisUniqueIndex(pais []*MjPai) (indexs []uint8) {
 		if p == nil {
 			continue
 		}
-		//fmt.Println(fmt.Sprintf("p = [%+v]", *p))
-		//fmt.Println(fmt.Sprintf("p.GetUniqueIndexByValue() = [%v]", p.GetUniqueIndexByValue()))
 		indexs[p.GetUniqueIndexByValue()]++
 	}
 	return
@@ -94,7 +89,7 @@ func tryHu(paiIndex []uint8, paiCount int) (canHu, is19Hu bool, jiangPai uint8) 
 				paiIndex[i+2] -= 1
 				canHu, is19Hu, jiangPai = tryHu(paiIndex, paiCount-3)
 				if canHu {
-					if !is19(uint8(i)) || !is19(uint8(i + 2)) {
+					if !is19(uint8(i)) || !is19(uint8(i+2)) {
 						is19Hu = false
 					}
 					return canHu, is19Hu, jiangPai
@@ -129,7 +124,7 @@ func tryHu(paiIndex []uint8, paiCount int) (canHu, is19Hu bool, jiangPai uint8) 
 				paiIndex[i+2] -= 1
 				canHu, is19Hu, jiangPai = tryHu(paiIndex, paiCount-3)
 				if canHu {
-					if !is19(uint8(i)) || !is19(uint8(i + 2)) {
+					if !is19(uint8(i)) || !is19(uint8(i+2)) {
 						is19Hu = false
 					}
 					return canHu, is19Hu, jiangPai
@@ -164,7 +159,7 @@ func tryHu(paiIndex []uint8, paiCount int) (canHu, is19Hu bool, jiangPai uint8) 
 				paiIndex[i+2] -= 1
 				canHu, is19Hu, jiangPai = tryHu(paiIndex, paiCount-3)
 				if canHu {
-					if !is19(uint8(i)) || !is19(uint8(i + 2)) {
+					if !is19(uint8(i)) || !is19(uint8(i+2)) {
 						is19Hu = false
 					}
 					return canHu, is19Hu, jiangPai
