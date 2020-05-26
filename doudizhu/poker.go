@@ -6,13 +6,6 @@ import (
 	"strings"
 )
 
-/*
-    @Create by GoLand
-    @Author: hong
-    @Time: 2018/7/26 17:04 
-    @File: poker.go    
-*/
-
 /*定义牌结构以及辅助方法*/
 
 const (

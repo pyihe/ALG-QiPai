@@ -1,7 +1,7 @@
 package doudizhu
 
 import (
-	"github.com/name5566/leaf/util"
+	"github.com/hong008/util/commonUtil"
 	"sort"
 )
 
@@ -627,7 +627,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 		if len(daiPai) == 1 {
 			//找的是单张
 			if len(danzhang) > 0 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisByValue(danzhang[0], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
 					return isOk, key
@@ -635,7 +635,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//找的是赖子
 			if laiZiCount > 0 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
 					return isOk, key
@@ -646,7 +646,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -656,7 +656,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			if len(danzhang) == 1 && laiZiCount > 0 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisByValue(danzhang[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -664,7 +664,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				}
 			}
 			if laiZiCount > 1 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -673,7 +673,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			if len(danzhang) == 0 && len(liangzhang) > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -697,7 +697,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找单牌
 			if len(danzhang) > 0 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
 						return isOk, key
@@ -707,7 +707,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 			//找赖子
 			if laiZiCount > 0 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
 					return isOk, key
@@ -721,7 +721,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -732,7 +732,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//找的全是赖子
 			if laiZiCount >= 2 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -743,7 +743,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) > 0 && laiZiCount > 0 {
 				//1张单张，1张赖子
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -754,7 +754,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找的是两张
 			if len(liangzhang) > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -770,7 +770,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < len(danzhang)-2; i++ {
 					for j := i + 1; j < len(danzhang)-1; j++ {
 						for k := j + 1; k < len(danzhang); k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[k], tempPais)
@@ -783,7 +783,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//全是赖子
 			if laiZiCount >= 3 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -797,7 +797,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 && laiZiCount >= 1 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
@@ -810,7 +810,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//两张赖子，一张单牌
 			if len(danzhang) >= 1 && laiZiCount >= 2 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -823,7 +823,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && len(danzhang) > 0 {
 				for _, v := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(v, tempPais)
 						tempPais = delPokerFromPaisByValue(v, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -836,7 +836,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找一个两张，一个赖子
 			if len(liangzhang) > 0 && laiZiCount > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -860,7 +860,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找单牌
 			if len(danzhang) > 0 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
 						return isOk, key
@@ -870,7 +870,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 
 			//找赖子
 			if laiZiCount > 0 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
 					return isOk, key
@@ -883,7 +883,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -894,7 +894,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//找的全是赖子
 			if laiZiCount >= 2 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -905,7 +905,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) > 0 && laiZiCount > 0 {
 				//1张单张，1张赖子
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -916,7 +916,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找的是两张
 			if len(liangzhang) > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -932,7 +932,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < len(danzhang)-2; i++ {
 					for j := i + 1; j < len(danzhang)-1; j++ {
 						for k := j + 1; k < len(danzhang); k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[k], tempPais)
@@ -945,7 +945,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//全是赖子
 			if laiZiCount >= 3 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -959,7 +959,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 && laiZiCount >= 1 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
@@ -972,7 +972,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//两张赖子，一张单牌
 			if len(danzhang) >= 1 && laiZiCount >= 2 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -985,7 +985,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && len(danzhang) > 0 {
 				for _, v := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(v, tempPais)
 						tempPais = delPokerFromPaisByValue(v, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -998,7 +998,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//找一个亮张，一个赖子
 			if len(liangzhang) > 0 && laiZiCount > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1017,7 +1017,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 					for j := i + 1; j < len(danzhang)-2; j++ {
 						for k := j + 1; j < len(danzhang)-1; k++ {
 							for m := k + 1; m < len(danzhang); m++ {
-								tempPais := util.DeepClone(newPais).([]*Poker)
+								tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 								tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 								tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 								tempPais = delPokerFromPaisByValue(danzhang[k], tempPais)
@@ -1032,7 +1032,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			}
 			//四张赖子
 			if laiZiCount == 4 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -1046,7 +1046,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < len(danzhang)-2; i++ {
 					for j := i + 1; j < len(danzhang)-1; j++ {
 						for k := j + 1; k < len(danzhang); k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
@@ -1062,7 +1062,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(danzhang) >= 2 && laiZiCount >= 2 {
 				for i := 0; i < len(danzhang)-1; i++ {
 					for j := i + 1; j < len(danzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 						tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
@@ -1076,7 +1076,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//三张赖子，1张单牌
 			if len(danzhang) >= 1 && laiZiCount >= 3 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1090,7 +1090,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 1 {
 				for i := 0; i < len(liangzhang)-1; i++ {
 					for j := i + 1; j < len(liangzhang); j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1106,7 +1106,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < len(liangzhang); i++ {
 					for j := 0; j < len(danzhang)-1; j++ {
 						for k := j + 1; k < len(danzhang); k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
@@ -1121,7 +1121,7 @@ func isAirDaiDan_lai(pais []*Poker) (bool, int32) {
 			//两张和赖子混合
 			if len(liangzhang) > 0 && laiZiCount > 1 {
 				for i := 0; i < len(liangzhang); i++ {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 					tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1182,7 +1182,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 
 		//三个2
 		if len(daiPai) == 3 {
-			tempPais := util.DeepClone(newPais).([]*Poker)
+			tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 			tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 			if isOk, key := isAirBuDai_lai(tempPais); isOk {
 				return isOk, key
@@ -1192,7 +1192,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 		if len(daiPai) == 2 {
 			//两个赖子
 			if laiZiCount > 1 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1202,7 +1202,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个单张，一个赖子
 			if len(danzhang) > 0 && laiZiCount > 0 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1213,7 +1213,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张
 			if len(liangzhang) > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1231,7 +1231,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个赖子，一个两张
 			if len(liangzhang) > 0 && laiZiCount >= 1 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1243,7 +1243,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//两个赖子，一个单张
 			if len(danzhang) > 0 && laiZiCount >= 2 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1254,7 +1254,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			}
 			//三个赖子
 			if laiZiCount >= 3 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -1270,7 +1270,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 {
 				for i := 0; i < liangzhangLen-1; i++ {
 					for j := i + 1; j < liangzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1284,7 +1284,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 
 			//找四个赖子
 			if laiZiCount == 4 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -1297,7 +1297,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//找一个两张，两个赖子
 			if len(liangzhang) >= 1 && laiZiCount >= 2 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1312,7 +1312,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && laiZiCount >= 1 && len(danzhang) > 0 {
 				for _, lv := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -1328,7 +1328,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if danzhangLen := len(danzhang); danzhangLen >= 1 && laiZiCount >= 1 {
 				for i := 0; i < danzhangLen-1; i++ {
 					for j := i + 1; j < danzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1349,7 +1349,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张
 			if liangzhangLen := len(liangzhang); liangzhangLen > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1359,7 +1359,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			}
 			//两个赖子
 			if laiZiCount > 1 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1369,7 +1369,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个赖子，一个单张
 			if len(danzhang) > 0 && laiZiCount > 0 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					if isOk, key := isAirBuDai_lai(tempPais); isOk {
@@ -1384,7 +1384,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张，一个赖子
 			if len(liangzhang) > 0 && laiZiCount > 0 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1395,7 +1395,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			}
 			//一个赖子， 两个赖子
 			if laiZiCount >= 3 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -1406,7 +1406,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个赖子， 一个赖子，一个单张
 			if len(danzhang) > 0 && laiZiCount >= 2 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1423,7 +1423,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if liangzhangLen := len(liangzhang); liangzhangLen > 1 {
 				for i := 0; i < liangzhangLen-1; i++ {
 					for j := i + 1; j < liangzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1437,7 +1437,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张，两个赖子
 			if len(liangzhang) > 0 && laiZiCount > 1 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1451,7 +1451,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount > 0 {
 				for _, lv := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -1464,7 +1464,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			}
 			//四个赖子
 			if laiZiCount == 4 {
-				tempPais := util.DeepClone(newPais).([]*Poker)
+				tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 				tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[1], tempPais)
 				tempPais = delPokerFromPaisById(laiZi[2], tempPais)
@@ -1477,7 +1477,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个单张， 三个赖子
 			if len(danzhang) > 0 && laiZiCount >= 3 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1491,7 +1491,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if danzhangLen := len(danzhang); danzhangLen > 1 && laiZiCount > 1 {
 				for i := 0; i < danzhangLen-1; i++ {
 					for j := i + 1; j < danzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1509,7 +1509,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个三张，三个赖子
 			if len(sanzhang) > 0 && laiZiCount >= 3 {
 				for _, v := range sanzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
@@ -1526,7 +1526,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 {
 				for i := 0; i < liangzhangLen-1; i++ {
 					for j := i + 1; j < liangzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
@@ -1541,7 +1541,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张，一个赖子， 两个赖子
 			if len(liangzhang) > 0 && laiZiCount >= 3 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1555,7 +1555,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount >= 2 {
 				for _, lv := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -1570,7 +1570,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个赖子， 一个单张，三个赖子
 			if len(danzhang) > 0 && laiZiCount == 4 {
 				for _, v := range danzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
 					tempPais = delPokerFromPaisById(laiZi[1], tempPais)
@@ -1585,7 +1585,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if danzhangLen := len(danzhang); danzhangLen >= 2 && laiZiCount >= 3 {
 				for i := 0; i < danzhangLen-1; i++ {
 					for j := i + 1; j < danzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1606,7 +1606,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < liangzhangLen-2; i++ {
 					for j := i + 1; j < liangzhangLen-1; j++ {
 						for k := j + 1; k < liangzhangLen; k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1624,7 +1624,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if liangzhangLen := len(liangzhang); liangzhangLen >= 2 && laiZiCount >= 2 {
 				for i := 0; i < liangzhangLen-1; i++ {
 					for j := i + 1; j < liangzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1642,7 +1642,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < len(liangzhang)-1; i++ {
 					for j := i + 1; j < len(liangzhang); j++ {
 						for _, v := range danzhang {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(liangzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(liangzhang[j], tempPais)
@@ -1659,7 +1659,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			//一个两张，四个赖子
 			if len(liangzhang) > 0 && laiZiCount == 4 {
 				for _, v := range liangzhang {
-					tempPais := util.DeepClone(newPais).([]*Poker)
+					tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisByValue(v, tempPais)
 					tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1675,7 +1675,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if len(liangzhang) > 0 && len(danzhang) > 0 && laiZiCount >= 3 {
 				for _, lv := range liangzhang {
 					for _, dv := range danzhang {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(lv, tempPais)
 						tempPais = delPokerFromPaisByValue(dv, tempPais)
@@ -1693,7 +1693,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 				for _, v := range liangzhang {
 					for i := 0; i < danzhangLen-1; i++ {
 						for j := i + 1; j < danzhangLen; j++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(v, tempPais)
 							tempPais = delPokerFromPaisByValue(v, tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
@@ -1711,7 +1711,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 			if danzhangLen := len(danzhang); danzhangLen >= 2 && laiZiCount == 4 {
 				for i := 0; i < danzhangLen-1; i++ {
 					for j := i + 1; j < danzhangLen; j++ {
-						tempPais := util.DeepClone(newPais).([]*Poker)
+						tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 						tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 						tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 						tempPais = delPokerFromPaisById(laiZi[0], tempPais)
@@ -1729,7 +1729,7 @@ func isAirDaiDui_lai(pais []*Poker) (bool, int32) {
 				for i := 0; i < danzhangLen-2; i++ {
 					for j := i + 1; j < danzhangLen-1; j++ {
 						for k := j + 1; k < danzhangLen; k++ {
-							tempPais := util.DeepClone(newPais).([]*Poker)
+							tempPais := commonUtil.DeepClone(newPais).([]*Poker)
 							tempPais = delPokerFromPaisByValue(danzhang[i], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[j], tempPais)
 							tempPais = delPokerFromPaisByValue(danzhang[k], tempPais)
@@ -3010,7 +3010,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 			if valueLen >= length {
 				for i := 0; i < valueLen-1; i++ {
 					for j := i + 1; j < valueLen; j++ {
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisByValue(values[i], newPais)
 						newPais = delPokerFromPaisByValue(values[i], newPais)
 						newPais = delPokerFromPaisByValue(values[j], newPais)
@@ -3028,7 +3028,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 						if danzhang[j] == 16 || danzhang[j] == 17 {
 							continue
 						}
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisById(laiZi[0], newPais)
 						newPais = delPokerFromPaisByValue(danzhang[j], newPais)
 						newPais = delPokerFromPaisByValue(values[i], newPais)
@@ -3050,7 +3050,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 						if danzhang[i] > 15 || danzhang[j] > 15 {
 							continue
 						}
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisById(laiZi[0], newPais)
 						newPais = delPokerFromPaisById(laiZi[1], newPais)
 						newPais = delPokerFromPaisByValue(danzhang[i], newPais)
@@ -3064,7 +3064,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 			//两个赖子作为一个对子
 			if valueLen >= 1 {
 				for i := 0; i < valueLen; i++ {
-					newPais := util.DeepClone(pais).([]*Poker)
+					newPais := commonUtil.DeepClone(pais).([]*Poker)
 					newPais = delPokerFromPaisById(laiZi[0], newPais)
 					newPais = delPokerFromPaisById(laiZi[1], newPais)
 					newPais = delPokerFromPaisByValue(values[i], newPais)
@@ -3082,7 +3082,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 				if danzhang[i] > 15 {
 					continue
 				}
-				newPais := util.DeepClone(pais).([]*Poker)
+				newPais := commonUtil.DeepClone(pais).([]*Poker)
 				newPais = delPokerFromPaisById(laiZi[0], newPais)
 				newPais = delPokerFromPaisById(laiZi[1], newPais)
 				newPais = delPokerFromPaisById(laiZi[2], newPais)
@@ -3094,7 +3094,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 		}
 
 		if laiZiCount >= 4 {
-			newPais := util.DeepClone(pais).([]*Poker)
+			newPais := commonUtil.DeepClone(pais).([]*Poker)
 			newPais = delPokerFromPaisById(laiZi[0], newPais)
 			newPais = delPokerFromPaisById(laiZi[1], newPais)
 			newPais = delPokerFromPaisById(laiZi[2], newPais)
@@ -3112,7 +3112,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 				for i := 0; i < length-2; i++ {
 					for j := i + 1; j < length-1; j++ {
 						for k := j + 1; k < length; k++ {
-							newPais := util.DeepClone(pais).([]*Poker)
+							newPais := commonUtil.DeepClone(pais).([]*Poker)
 							newPais = delPokerFromPaisByValue(values[i], newPais)
 							newPais = delPokerFromPaisByValue(values[i], newPais)
 							newPais = delPokerFromPaisByValue(values[j], newPais)
@@ -3136,7 +3136,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 								if danzhang[k] > 15 {
 									continue
 								}
-								newPais := util.DeepClone(pais).([]*Poker)
+								newPais := commonUtil.DeepClone(pais).([]*Poker)
 								newPais = delPokerFromPaisById(laiZi[0], newPais)
 								newPais = delPokerFromPaisByValue(danzhang[k], newPais)
 								newPais = delPokerFromPaisByValue(values[i], newPais)
@@ -3162,7 +3162,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 							if danzhang[j] > 15 || danzhang[k] > 15 {
 								continue
 							}
-							newPais := util.DeepClone(pais).([]*Poker)
+							newPais := commonUtil.DeepClone(pais).([]*Poker)
 							newPais = delPokerFromPaisById(laiZi[0], newPais)
 							newPais = delPokerFromPaisById(laiZi[1], newPais)
 							newPais = delPokerFromPaisByValue(values[i], newPais)
@@ -3180,7 +3180,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 			if valueLen >= 2 {
 				for i := 0; i < valueLen-1; i++ {
 					for j := i + 1; j < valueLen; j++ {
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisById(laiZi[0], newPais)
 						newPais = delPokerFromPaisById(laiZi[1], newPais)
 						newPais = delPokerFromPaisByValue(values[i], newPais)
@@ -3204,7 +3204,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 							if danzhang[i] > 15 || danzhang[j] > 15 || danzhang[k] > 15 {
 								continue
 							}
-							newPais := util.DeepClone(pais).([]*Poker)
+							newPais := commonUtil.DeepClone(pais).([]*Poker)
 							newPais = delPokerFromPaisById(laiZi[0], newPais)
 							newPais = delPokerFromPaisById(laiZi[1], newPais)
 							newPais = delPokerFromPaisById(laiZi[2], newPais)
@@ -3225,7 +3225,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 						if danzhang[j] > 15 {
 							continue
 						}
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisById(laiZi[0], newPais)
 						newPais = delPokerFromPaisById(laiZi[1], newPais)
 						newPais = delPokerFromPaisById(laiZi[2], newPais)
@@ -3247,7 +3247,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 						if danzhang[j] > 15 || danzhang[k] > 15 {
 							continue
 						}
-						newPais := util.DeepClone(pais).([]*Poker)
+						newPais := commonUtil.DeepClone(pais).([]*Poker)
 						newPais = delPokerFromPaisById(laiZi[0], newPais)
 						newPais = delPokerFromPaisById(laiZi[1], newPais)
 						newPais = delPokerFromPaisById(laiZi[2], newPais)
@@ -3263,7 +3263,7 @@ func largerAirDaiDui_lai(pais []*Poker, key int32, length int) bool {
 			//四个赖子补两个对子
 			if valueLen > 0 {
 				for i := 0; i < valueLen; i++ {
-					newPais := util.DeepClone(pais).([]*Poker)
+					newPais := commonUtil.DeepClone(pais).([]*Poker)
 					newPais = delPokerFromPaisById(laiZi[0], newPais)
 					newPais = delPokerFromPaisById(laiZi[1], newPais)
 					newPais = delPokerFromPaisById(laiZi[2], newPais)
