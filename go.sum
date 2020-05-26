@@ -1,0 +1,5 @@
+github.com/garyburd/redigo v1.6.0/go.mod h1:NR3MbYisc3/PwhQ00EMzDiPmrwpPxAn5GI05/YaO1SY=
+github.com/hong008/util v0.0.2-0.20200526021904-7d109c895d5d h1:MPaR5VAU4N59bM4n8r8RQcrqfe08hfOMEgX6FpyIHQU=
+github.com/hong008/util v0.0.2-0.20200526021904-7d109c895d5d/go.mod h1:Sdd7FPNJ+k9YpiQupRpvVdjOJGvwejsO2e+eNX0vZZ8=
+github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
+github.com/vmihailenco/msgpack v4.0.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
