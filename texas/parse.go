@@ -46,12 +46,13 @@ func (pokerList PokerList) GetPokerIds() (ids []int32) {
 }
 
 func (pokerList PokerList) Desc(args ...interface{}) (desc string) {
-	var needSort bool
 	if len(args) > 0 {
-		needSort = args[0].(bool)
-	}
-	if needSort {
-		sort.Sort(pokerList)
+		switch b := args[0].(type) {
+		case bool:
+			if b {
+				sort.Sort(pokerList)
+			}
+		}
 	}
 	for _, p := range pokerList {
 		if p == nil {
@@ -148,7 +149,7 @@ func (pokerList PokerList) fivePoker() (pokers PokerList, pokerType texasPokerTy
 	return
 }
 
-//解析5张牌
+//解析6张牌
 func (pokerList PokerList) sixPoker() (pokers PokerList, pokerType texasPokerType, value int32) {
 	for i := 0; i < len(pokerList); i++ {
 		tempPokers := pokerList.DeletePokers(pokerList[i])
@@ -167,7 +168,7 @@ func (pokerList PokerList) sixPoker() (pokers PokerList, pokerType texasPokerTyp
 	return
 }
 
-//解析5张牌
+//解析7张牌
 func (pokerList PokerList) sevenPoker() (pokers PokerList, pokerType texasPokerType, value int32) {
 	for i := 0; i < len(pokerList); i++ {
 		for j := i + 1; j < len(pokerList); j++ {
