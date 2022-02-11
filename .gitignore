@@ -12,3 +12,4 @@
 *.out
 parser_lai_test.go
 *_test.go
+.idea
