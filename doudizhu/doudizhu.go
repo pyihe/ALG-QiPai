@@ -3,9 +3,49 @@ package doudizhu
 import (
 	"ALG-QiPai/cards"
 	"errors"
+	"fmt"
 	"reflect"
 	"sort"
 )
+
+func PrintCards(handCards []cards.Card) (desc string) {
+	for _, c := range handCards {
+		sd, vd := "", ""
+		suit, value := c.Suit(), c.Value()
+
+		switch suit {
+		case cards.CardSuitDiamond:
+			sd = "方块"
+		case cards.CardSuitClub:
+			sd = "梅花"
+		case cards.CardSuitHeart:
+			sd = "红桃"
+		case cards.CardSuitSpade:
+			sd = "黑桃"
+		}
+
+		switch value {
+		case 11:
+			vd = "J"
+		case 12:
+			vd = "Q"
+		case 14:
+			vd = "A"
+		case 13:
+			vd = "K"
+		case 15:
+			vd = "2"
+		case 16:
+			vd = "小王"
+		case 17:
+			vd = "大王"
+		default:
+			vd = fmt.Sprintf("%d", value)
+		}
+		desc += sd + vd + " "
+	}
+	return
+}
 
 type ddzCards []cards.Card
 
@@ -77,6 +117,41 @@ type DDZGroup struct {
 	GhostCount int             // 牌型包含的赖子牌数量
 	Key        int32           // 用于相同牌型之间的比较
 	Cards      []cards.Card    // 组成牌型的牌
+}
+
+func (dg DDZGroup) String() (desc string) {
+	switch dg.Type {
+	case cards.GroupTypeDDZSingle:
+		desc = "单牌"
+	case cards.GroupTypeDDZPair:
+		desc = "对子"
+	case cards.GroupTypeDDZTriplet:
+		desc = "三不带"
+	case cards.GroupTypeDDZTripletWithSingle:
+		desc = "三带一"
+	case cards.GroupTypeDDZTripletWithPair:
+		desc = "三带对"
+	case cards.GroupTypeDDZSequence:
+		desc = "顺子"
+	case cards.GroupTypeDDZSequenceOfPair:
+		desc = "连对"
+	case cards.GroupTypeDDZSequenceOfTriplet:
+		desc = "飞机不带牌"
+	case cards.GroupTypeDDZSequenceOfTripletWithSingle:
+		desc = "飞机带单牌"
+	case cards.GroupTypeDDZSequenceOfTripletWithPair:
+		desc = "飞机带对子"
+	case cards.GroupTypeDDZQuadplexSetWithSingle:
+		desc = "四带二(单牌)"
+	case cards.GroupTypeDDZQuadplexSetWithPair:
+		desc = "四带二(对子)"
+	case cards.GroupTypeDDZBomb:
+		desc = "炸弹"
+	case cards.GroupTypeDDZRocket:
+		desc = "火箭"
+	}
+	desc = fmt.Sprintf("Type:%s, Length:%v, GhostCount:%v, Key:%v, Cards:%v", desc, dg.Length, dg.GhostCount, dg.Key, PrintCards(dg.Cards))
+	return
 }
 
 func (dg DDZGroup) IsZero() bool {

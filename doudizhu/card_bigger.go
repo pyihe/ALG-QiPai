@@ -2,7 +2,7 @@ package doudizhu
 
 import (
 	"ALG-QiPai/cards"
-	"ALG-QiPai/pkg"
+	"github.com/pyihe/go-pkg/maths"
 )
 
 // BiggerGroup 找到比指定牌型更大的牌型
@@ -498,7 +498,7 @@ outLoop:
 			continue outLoop
 		}
 		// 从单牌的所有组合里找出length个组合
-		combs := pkg.Combination(len(singleGroups), sequence.Length)
+		combs := maths.Combination(len(singleGroups), sequence.Length)
 		singles := make([][]DDZGroup, len(combs))
 		for k, ss := range combs {
 			for m, v := range ss {
@@ -577,7 +577,7 @@ outLoop:
 			continue outLoop
 		}
 		// 从单牌的所有组合里找出length个组合
-		combs := pkg.Combination(len(pairGroups), sequence.Length)
+		combs := maths.Combination(len(pairGroups), sequence.Length)
 		singles := make([][]DDZGroup, len(combs))
 		for k, ss := range combs {
 			for m, v := range ss {
@@ -633,7 +633,7 @@ outLoop:
 			continue outLoop
 		}
 		// 从单牌的所有组合里找出length个组合
-		combs := pkg.Combination(len(singleGroups), 2)
+		combs := maths.Combination(len(singleGroups), 2)
 		singles := make([][]DDZGroup, len(combs))
 		for k, ss := range combs {
 			for m, v := range ss {
@@ -689,7 +689,7 @@ outLoop:
 			continue outLoop
 		}
 		// 从单牌的所有组合里找出length个组合
-		combs := pkg.Combination(len(pairGroups), 2)
+		combs := maths.Combination(len(pairGroups), 2)
 		pairs := make([][]DDZGroup, len(combs))
 		for k, ss := range combs {
 			for m, v := range ss {

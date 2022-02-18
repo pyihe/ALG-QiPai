@@ -20,6 +20,8 @@ github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pyihe/go-pkg v0.0.0-20211210143529-a1fb84f0ad0a h1:aEeDOyasZ5NDitlPKB40+VOFY8VUCqMAd6l7dJdRGik=
 github.com/pyihe/go-pkg v0.0.0-20211210143529-a1fb84f0ad0a/go.mod h1:zYn7jzKOjtr8piG9Ull9EihUroL130Z1wKljPVwAQQU=
+github.com/pyihe/go-pkg v0.0.0-20220215090353-d7f79e68571e h1:cqTnwF9C11ZXeOX/otSQ/ocqkqNvKZMvlJ+PPcoHbZE=
+github.com/pyihe/go-pkg v0.0.0-20220215090353-d7f79e68571e/go.mod h1:zYn7jzKOjtr8piG9Ull9EihUroL130Z1wKljPVwAQQU=
 github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

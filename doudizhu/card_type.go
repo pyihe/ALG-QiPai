@@ -664,7 +664,7 @@ func isSequenceOfTriplet(paiCountInfo *PaiCountData) (group DDZGroup) {
 	}
 	if ghostCount == 0 && (end-start+1)*3 == paiCount+paiCountInfo.GhostCount() {
 		group = DDZGroup{
-			Type:       cards.GroupTypeDDZSequenceOfPair,
+			Type:       cards.GroupTypeDDZSequenceOfTriplet,
 			Length:     end - start + 1,
 			GhostCount: ghostCount,
 			Key:        int32(start),
@@ -708,6 +708,7 @@ outLoop:
 				}
 				if n < 3 {
 					gn -= 3 - n
+					pn -= n
 				} else {
 					pn -= 3
 				}
@@ -762,6 +763,8 @@ outLoop:
 				}
 				if n < 3 {
 					gn -= 3 - n
+					pn -= n
+					countInfo[j-k] -= n
 				} else {
 					pn -= 3
 					countInfo[j-k] -= 3
@@ -799,7 +802,7 @@ outLoop:
 			if pn != 0 || gn%2 != 0 {
 				continue innerLoop
 			}
-			if gn%2+pairCount == i {
+			if gn/2+pairCount == i {
 				group = DDZGroup{
 					Type:       cards.GroupTypeDDZSequenceOfTripletWithPair,
 					Length:     i,
@@ -911,7 +914,7 @@ func isQuadplexSetWithPair(paiCountInfo *PaiCountData) (group DDZGroup) {
 		if pn != 0 || gn%2 != 0 {
 			continue
 		}
-		if gn%2+pairCount == 2 {
+		if gn/2+pairCount == 2 {
 			group = DDZGroup{
 				Type:       cards.GroupTypeDDZQuadplexSetWithPair,
 				Length:     1,
