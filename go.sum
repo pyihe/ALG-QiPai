@@ -22,6 +22,8 @@ github.com/pyihe/go-pkg v0.0.0-20211210143529-a1fb84f0ad0a h1:aEeDOyasZ5NDitlPKB
 github.com/pyihe/go-pkg v0.0.0-20211210143529-a1fb84f0ad0a/go.mod h1:zYn7jzKOjtr8piG9Ull9EihUroL130Z1wKljPVwAQQU=
 github.com/pyihe/go-pkg v0.0.0-20220215090353-d7f79e68571e h1:cqTnwF9C11ZXeOX/otSQ/ocqkqNvKZMvlJ+PPcoHbZE=
 github.com/pyihe/go-pkg v0.0.0-20220215090353-d7f79e68571e/go.mod h1:zYn7jzKOjtr8piG9Ull9EihUroL130Z1wKljPVwAQQU=
+github.com/pyihe/go-selector v0.0.0-20220822095421-33f9a6f4010e h1:KHpLZOFkOVEf2ADFvF3i+y1OZ2oUINgPIWeFSEMPw3o=
+github.com/pyihe/go-selector v0.0.0-20220822095421-33f9a6f4010e/go.mod h1:IePRUcd1u5rokd6k0W0XJ+v8folkGIIg1LSbsxAm7rA=
 github.com/robfig/cron/v3 v3.0.0/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/robfig/cron/v3 v3.0.1/go.mod h1:eQICP3HwyT7UooqI/z+Ov+PtYAWygg1TEWWzGIFLtro=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
